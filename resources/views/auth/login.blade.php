@@ -192,47 +192,55 @@
             <div class="logo-text">DANA UMKM DESA</div>
         </div>
 
-        <h2>Login Pengguna</h2>
+     <h2>Login Pengguna</h2>
 
-        <!-- Session Status -->
-        @if (session('status'))
-            <div class="error-message" style="color: green; text-align:center; margin-bottom: 10px;">
-                {{ session('status') }}
-            </div>
+<!-- GLOBAL ERROR -->
+@if ($errors->any())
+    <div class="error-message" style="text-align: center; margin-bottom: 1rem;">
+        {{ $errors->first() }}
+    </div>
+@endif
+
+<!-- Session Status -->
+@if (session('status'))
+    <div class="error-message" style="color: green; text-align:center; margin-bottom: 10px;">
+        {{ session('status') }}
+    </div>
+@endif
+
+<form method="POST" action="{{ route('login') }}">
+
+    @csrf
+
+    <div class="input-group">
+        <label for="email">Email:</label>
+        <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
+        @error('email')
+            <span class="error-message">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="input-group">
+        <label for="password">Password:</label>
+        <input id="password" type="password" name="password" required>
+        @error('password')
+            <span class="error-message">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="forgot-password">
+        @if (Route::has('password.request'))
+            <a href="{{ route('password.request') }}">Lupa password?</a>
         @endif
+    </div>
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
-                @error('email')
-                    <span class="error-message">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="input-group">
-                <label for="password">Password:</label>
-                <input id="password" type="password" name="password" required>
-                @error('password')
-                    <span class="error-message">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="forgot-password">
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}">Lupa password?</a>
-                @endif
-            </div>
-
-            <button type="submit" class="btn">Login</button>
-        </form>
+    <button type="submit" class="btn">Login</button>
+</form>
 
         <div class="login-divider">
             <span></span>
             <p>atau</p>
-            <span></span>
+            <span></span>   
         </div>
 
         <p>Belum punya akun? <a href="{{ route('register') }}">Daftar</a></p>

@@ -1,12 +1,14 @@
 <header class="bg-green-800 text-white p-4 shadow-md">
-    <div class="container mx-auto flex justify-between items-center">
+    <div class="container mx-auto flex items-center">
         <div class="flex items-center gap-4 text-2xl">
             <div>🌾</div>
             <h1 class="font-bold">DANA UMKM DESA</h1>
         </div>
-        <form method="POST" action="{{ route('logout') }}">
+        <form method="POST" action="{{ route('logout') }}" class="ml-auto">
             @csrf
-            <button type="submit" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded font-semibold">Logout</button>
+            <button type="submit" class="logout-btn">
+                Logout
+            </button>
         </form>
     </div>
 </header>

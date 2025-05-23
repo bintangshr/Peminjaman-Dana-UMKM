@@ -25,19 +25,21 @@ class AuthenticatedSessionController extends Controller
      */
   public function store(Request $request): RedirectResponse
 {
-    $request->validate([
-        'username' => 'required|string',
-        'password' => 'required|string',
-    ]);
+   $request->validate([
+    'email' => 'required|email',
+    'password' => 'required|string',
+]);
 
-    if (Auth::attempt(['username' => $request->username, 'password' => $request->password], $request->boolean('remember'))) {
-        $request->session()->regenerate();
+if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->boolean('remember'))) {
+    $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
-    }
-    return back()->withErrors([
-        'username' => 'Username atau password salah.',
-    ])->onlyInput('username');
+    return redirect()->intended(route('dashboard', absolute: false));
+}
+
+return back()->withErrors([
+    'email' => 'Email atau password salah.',
+])->onlyInput('email');
+
 }
 
     /**

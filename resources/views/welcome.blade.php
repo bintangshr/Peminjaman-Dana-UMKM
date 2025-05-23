@@ -55,7 +55,7 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" id="beranda">
+    <section class="hero" id="beranda" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/hero1.jpg') no-repeat center center; background-size: cover; height: 780px; display: flex; align-items: center; justify-content: center; text-align: center; color: white;">
         <div class="hero-content">
             <h2>Dukung UMKM Desa, Bangkitkan Ekonomi Lokal</h2>
             <p>Solusi pembiayaan dan pendampingan untuk membantu usaha mikro, kecil, dan menengah di desa Anda berkembang dan mencapai potensi maksimal.</p>
