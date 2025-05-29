@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('layouts.navbar')
+
 <!-- Hero Section -->
 <section class="hero" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/hero1.jpg') no-repeat center center; background-size: cover; height: 660px; display: flex; align-items: center; justify-content: center; text-align: center; color: white;">
     <div class="hero-content max-w-3xl p-8">
