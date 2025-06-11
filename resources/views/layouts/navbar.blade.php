@@ -5,7 +5,6 @@
             <h1 class="font-bold">DANA UMKM DESA</h1>
         </div>
 
-        <!-- Dropdown Profil Breeze -->
         <div class="ml-auto relative inline-block text-left">
             <button onclick="toggleDropdown()" class="flex items-center gap-2 text-white font-medium hover:underline focus:outline">
                 {{ Auth::user()->name }}
@@ -14,25 +13,29 @@
                 </svg>
             </button>
 
-            <div id="dropdown" class="hidden absolute right-0 mt-2 w-40 bg-green-700 text-white rounded-md shadow-lg z-50">
-    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 hover:bg-green-600 hover:text-white">Profil</a>
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button method="submit" class="block px-4 py-2 hover:bg-green-600 hover:text-white">Keluar</button>
-    </form>
-</div>
-
+            <div id="dropdown" class="hidden absolute right-0 mt-2 w-48 bg-green-700 text-white rounded-md shadow-lg z-50">
+                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 hover:bg-green-600 hover:text-white">Profil</a>
+                @if(Auth::user()->role == 'admin')
+                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 hover:bg-green-600 hover:text-white">Admin Dashboard</a>
+                @endif
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full text-left block px-4 py-2 hover:bg-green-600 hover:text-white">Keluar</button>
+                </form>
+            </div>
         </div>
     </div>
 </header>
 
-
 <nav class="bg-green-900 text-white">
     <div class="container mx-auto">
         <ul class="flex space-x-8 p-3 flex-wrap md:flex-nowrap">
-            <li><a href="{{ route('dashboard') }}" class="hover:underline">Beranda</a></li>
-            
-            <li><a href="{{ url('datadiri') }}" class="hover:underline">Ajukan Pinjaman</a></li>
+            @if(Auth::user()->role == 'admin')
+                <li><a href="{{ route('admin.dashboard') }}" class="hover:underline">Admin Dashboard</a></li>
+            @else
+                <li><a href="{{ route('dashboard') }}" class="hover:underline">Beranda</a></li>
+            @endif
+            <li><a href="{{ route('pinjaman.create') }}" class="hover:underline">Ajukan Pinjaman</a></li>
             <li><a href="#program" class="hover:underline">Program</a></li>
             <li><a href="{{ url('status') }}" class="hover:underline">Status Pengajuan</a></li>
             <li><a href="#berita" class="hover:underline">Berita & Info</a></li>
@@ -49,10 +52,14 @@
 
     // Optional: Tutup dropdown saat klik di luar
     document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('dropdown');
-        const button = event.target.closest('button');
-        if (!event.target.closest('#dropdown') && !button) {
-            dropdown.classList.add('hidden');
+        const dropdownButton = document.querySelector('button[onclick="toggleDropdown()"]');
+        const dropdownMenu = document.getElementById('dropdown');
+
+        // Check if the click is outside the dropdown button and menu
+        if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            if (!dropdownMenu.classList.contains('hidden')) {
+                dropdownMenu.classList.add('hidden');
+            }
         }
     });
 </script>
