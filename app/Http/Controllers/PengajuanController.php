@@ -74,6 +74,7 @@ class PengajuanController extends Controller
             'telepon' => 'required|string|max:20',
             'email' => 'required|email|max:255',
             'alamat' => 'required|string',
+            'dusun' => 'required|string|in:BEJEN,BAREPAN,NGENTAK,BROJONALAN,GEDONGAN,SOROPADAN,TINGAL,JOWAHAN',
             'ktp' => 'required|file|mimes:pdf|max:2048',
             'kk' => 'required|file|mimes:pdf|max:2048',
             'nominal' => 'required|numeric|min:0',
@@ -89,6 +90,7 @@ class PengajuanController extends Controller
             'telepon' => $validatedData['telepon'],
             'email' => $validatedData['email'],
             'alamat' => $validatedData['alamat'],
+            'dusun' => $validatedData['dusun'],
             'nominal' => $validatedData['nominal'],
             'tujuan_pendanaan' => $validatedData['tujuan_pendanaan'],
             'tgl_pengajuan' => now(),
@@ -183,6 +185,7 @@ class PengajuanController extends Controller
             'nama' => 'required|string|max:255',
             'nid' => ['required','string','max:255', Rule::unique('pengajuan', 'nid')->ignore($pengajuan->id)],
             'email' => 'required|email|max:255',
+            'dusun' => 'required|string|in:BEJEN,BAREPAN,NGENTAK,BROJONALAN,GEDONGAN,SOROPADAN,TINGAL,JOWAHAN',
             'nominal' => 'required|numeric|min:0',
             'status' => 'required|string|in:pending_detail_usaha,pending_review,approved,rejected,completed',
         ]);

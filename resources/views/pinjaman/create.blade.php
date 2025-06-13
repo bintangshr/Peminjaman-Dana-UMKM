@@ -73,6 +73,22 @@
                         <label for="alamat" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Alamat Domisili</label>
                         <textarea id="alamat" name="alamat" rows="3" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">{{ old('alamat') }}</textarea>
                     </div>
+
+                    {{-- Dusun --}}
+                    <div>
+                        <label for="dusun" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Dusun</label>
+                        <select id="dusun" name="dusun" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                            <option value="">- Pilih Dusun -</option>
+                            <option value="BEJEN" {{ old('dusun') == 'BEJEN' ? 'selected' : '' }}>BEJEN</option>
+                            <option value="BAREPAN" {{ old('dusun') == 'BAREPAN' ? 'selected' : '' }}>BAREPAN</option>
+                            <option value="NGENTAK" {{ old('dusun') == 'NGENTAK' ? 'selected' : '' }}>NGENTAK</option>
+                            <option value="BROJONALAN" {{ old('dusun') == 'BROJONALAN' ? 'selected' : '' }}>BROJONALAN</option>
+                            <option value="GEDONGAN" {{ old('dusun') == 'GEDONGAN' ? 'selected' : '' }}>GEDONGAN</option>
+                            <option value="SOROPADAN" {{ old('dusun') == 'SOROPADAN' ? 'selected' : '' }}>SOROPADAN</option>
+                            <option value="TINGAL" {{ old('dusun') == 'TINGAL' ? 'selected' : '' }}>TINGAL</option>
+                            <option value="JOWAHAN" {{ old('dusun') == 'JOWAHAN' ? 'selected' : '' }}>JOWAHAN</option>
+                        </select>
+                    </div>
                     
                     {{-- Email Pemohon --}}
                      <div>

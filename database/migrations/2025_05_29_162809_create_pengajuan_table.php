@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('telepon');
             $table->string('email');
             $table->text('alamat');
+            $table->string('dusun'); // Tambahan kolom dusun
             $table->string('ktp_path')->nullable(); // Path ke file KTP
             $table->string('kk_path')->nullable();  // Path ke file KK
             

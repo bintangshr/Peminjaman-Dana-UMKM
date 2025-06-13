@@ -25,6 +25,7 @@ class Pengajuan extends Model
         'tanggal_lahir',
         'telepon',
         'alamat',
+        'dusun',
         'email',
         'ktp_path',     // <--- PASTIKAN INI BENAR (BUKAN 'ktp')
         'kk_path',      // <--- PASTIKAN INI BENAR (BUKAN 'kk')

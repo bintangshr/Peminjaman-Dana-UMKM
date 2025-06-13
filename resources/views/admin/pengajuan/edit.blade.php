@@ -47,6 +47,22 @@
                         <input type="email" id="email" name="email" value="{{ old('email', $pengajuan->email) }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
                     </div>
                     
+                     {{-- Dusun --}}
+                     <div>
+                        <label for="dusun" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Dusun</label>
+                        <select id="dusun" name="dusun" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                            <option value="">- Pilih Dusun -</option>
+                            <option value="BEJEN" {{ old('dusun', $pengajuan->dusun) == 'BEJEN' ? 'selected' : '' }}>BEJEN</option>
+                            <option value="BAREPAN" {{ old('dusun', $pengajuan->dusun) == 'BAREPAN' ? 'selected' : '' }}>BAREPAN</option>
+                            <option value="NGENTAK" {{ old('dusun', $pengajuan->dusun) == 'NGENTAK' ? 'selected' : '' }}>NGENTAK</option>
+                            <option value="BROJONALAN" {{ old('dusun', $pengajuan->dusun) == 'BROJONALAN' ? 'selected' : '' }}>BROJONALAN</option>
+                            <option value="GEDONGAN" {{ old('dusun', $pengajuan->dusun) == 'GEDONGAN' ? 'selected' : '' }}>GEDONGAN</option>
+                            <option value="SOROPADAN" {{ old('dusun', $pengajuan->dusun) == 'SOROPADAN' ? 'selected' : '' }}>SOROPADAN</option>
+                            <option value="TINGAL" {{ old('dusun', $pengajuan->dusun) == 'TINGAL' ? 'selected' : '' }}>TINGAL</option>
+                            <option value="JOWAHAN" {{ old('dusun', $pengajuan->dusun) == 'JOWAHAN' ? 'selected' : '' }}>JOWAHAN</option>
+                        </select>
+                    </div>
+
                     {{-- Nominal Pengajuan --}}
                     <div>
                         <label for="nominal" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nominal (Rp)</label>
