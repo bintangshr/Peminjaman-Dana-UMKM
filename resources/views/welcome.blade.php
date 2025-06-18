@@ -1,5 +1,3 @@
-{{-- resources/views/welcome.blade.php --}}
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -130,24 +128,22 @@
                     
                     <!-- Auth Buttons -->
                     <div class="flex items-center space-x-4">
-                        @if (Route::has('login'))
-                            @auth
-                                <a href="{{ url('/dashboard') }}" class="px-4 py-2 text-primary hover:text-secondary font-medium transition-colors duration-300">Dashboard</a>
-                                <form method="POST" action="{{ route('logout') }}" class="inline">
-                                    @csrf
-                                    <button type="submit" class="px-4 py-2 text-primary hover:text-secondary font-medium transition-colors duration-300">
-                                        Keluar
-                                    </button>
-                                </form>
-                            @else
-                                <a href="{{ route('login') }}" class="px-6 py-2.5 bg-primary hover:bg-secondary text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105">
-                                    Masuk
-                                </a>
-                                <a href="{{ route('login') }}" class="px-6 py-2.5 bg-gradient-to-r from-primary to-accent hover:from-secondary hover:to-primary text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105">
-                                    Ajukan
-                                </a>
-                            @endauth
-                        @endif
+                        @auth
+                            <a href="{{ url('/dashboard') }}" class="px-4 py-2 text-primary hover:text-secondary font-medium transition-colors duration-300">Dashboard</a>
+                            <form method="POST" action="{{ route('logout') }}" class="inline">
+                                @csrf
+                                <button type="submit" class="px-4 py-2 text-primary hover:text-secondary font-medium transition-colors duration-300">
+                                    Keluar
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="px-6 py-2.5 bg-primary hover:bg-secondary text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105">
+                                Masuk
+                            </a>
+                            <a href="{{ route('login') }}" class="px-6 py-2.5 bg-gradient-to-r from-primary to-accent hover:from-secondary hover:to-primary text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105">
+                                Ajukan
+                            </a>
+                        @endauth
                     </div>
                 </nav>
             </div>
@@ -163,20 +159,18 @@
                 </ul>
                 
                 <div class="mt-6 px-4 space-y-3">
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="block w-full px-4 py-2.5 text-center bg-gray-100 text-primary font-medium rounded-lg hover:bg-gray-200 transition-colors duration-300">Dashboard</a>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="block w-full px-4 py-2.5 text-center bg-primary text-white font-medium rounded-lg hover:bg-secondary transition-colors duration-300">
-                                    Keluar
-                                </button>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}" class="block w-full px-4 py-2.5 text-center bg-gray-100 text-primary font-medium rounded-lg hover:bg-gray-200 transition-colors duration-300">Masuk</a>
-                            <a href="{{ route('login') }}" class="block w-full px-4 py-2.5 text-center bg-gradient-to-r from-primary to-accent text-white font-medium rounded-lg hover:from-secondary hover:to-primary transition-all duration-300">Ajukan Sekarang</a>
-                        @endauth
-                    @endif
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="block w-full px-4 py-2.5 text-center bg-gray-100 text-primary font-medium rounded-lg hover:bg-gray-200 transition-colors duration-300">Dashboard</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="block w-full px-4 py-2.5 text-center bg-primary text-white font-medium rounded-lg hover:bg-secondary transition-colors duration-300">
+                                Keluar
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="block w-full px-4 py-2.5 text-center bg-gray-100 text-primary font-medium rounded-lg hover:bg-gray-200 transition-colors duration-300">Masuk</a>
+                        <a href="{{ route('login') }}" class="block w-full px-4 py-2.5 text-center bg-gradient-to-r from-primary to-accent text-white font-medium rounded-lg hover:from-secondary hover:to-primary transition-all duration-300">Ajukan Sekarang</a>
+                    @endauth
                 </div>
             </nav>
         </div>
@@ -340,6 +334,8 @@
         </div>
     </section>
 
+   
+
     <!-- Statistics Section -->
     <section class="py-20 bg-white">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -354,166 +350,154 @@
             
             <div class="max-w-5xl mx-auto">
                 <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
-                    <canvas id="statistikChart" class="w-full h-[400px]"></canvas>
+                    <div class="text-gray-700 font-medium mb-4">Statistik Pengajuan per Dusun</div>
+                    <div class="relative" style="height: 400px; width: 100%;">
+                        <canvas id="statistikChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <script>
-        // Fetch and render statistik chart
-        fetch('/statistik-dusun')
-            .then(response => response.json())
-            .then(data => {
-                const ctx = document.getElementById('statistikChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'Jumlah Pengajuan Disetujui',
-                            data: data.data,
-                            backgroundColor: '#22c55e',
-                            borderColor: '#16a34a',
-                            borderWidth: 1,
-                            borderRadius: 8,
-                            maxBarThickness: 50
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Statistik Pengajuan per Dusun'
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    precision: 0
-                                }
-                            }
-                        }
-                    }
-                });
-            })
-            .catch(error => console.error('Error loading statistics:', error));
-    </script>
-
-    <!-- Testimonials Section -->
-    <section class="py-20 bg-gradient-to-br from-gray-50 to-white" id="testimoni">
+    <!-- Testimoni Section -->
+    <section class="py-20 bg-white">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
                     Apa Kata Mereka <span class="gradient-text">Tentang Kami</span>
                 </h2>
                 <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
                     Testimoni dari para pelaku UMKM yang telah merasakan manfaat dari program kami.
                 </p>
             </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Testimonial 1 -->
-                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl shadow p-8 flex flex-col items-start">
                     <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xl mr-4">
-                            A
-                        </div>
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold mr-3">A</div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Ahmad Fauzi</h3>
-                            <p class="text-gray-500">Pemilik Toko Oleh-Oleh</p>
+                            <div class="font-semibold text-gray-900">Ahmad Fauzi</div>
+                            <div class="text-xs text-gray-500">Pemilik Toko Oleh Oleh</div>
                         </div>
                     </div>
-                    <p class="text-gray-700 mb-4">
-                        "Program pinjaman modal usaha sangat membantu saya dalam mengembangkan toko oleh-oleh khas daerah. Prosesnya cepat dan mudah, serta bunganya yang rendah membuat saya terbantu sekali."
-                    </p>
-                    <div class="flex items-center">
-                        <span class="text-primary font-semibold">⭐⭐⭐⭐⭐</span>
-                    </div>
+                    <div class="text-gray-700 mb-4">"Program pinjaman modal usaha sangat membantu saya dalam mengembangkan toko oleh-oleh khas daerah. Prosesnya cepat dan mudah, serta bunganya yang rendah membuat saya terbantu sekali."</div>
+                    <div class="flex text-yellow-400 text-lg">★★★★★</div>
                 </div>
-
-                <!-- Testimonial 2 -->
-                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
+                <div class="bg-white rounded-2xl shadow p-8 flex flex-col items-start">
                     <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xl mr-4">
-                            S
-                        </div>
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold mr-3">S</div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Siti Aminah</h3>
-                            <p class="text-gray-500">Petani Sayur Organik</p>
+                            <div class="font-semibold text-gray-900">Siti Aminah</div>
+                            <div class="text-xs text-gray-500">Petani Sayur Organik</div>
                         </div>
                     </div>
-                    <p class="text-gray-700 mb-4">
-                        "Saya sangat terbantu dengan adanya program pembiayaan alat produksi ini. Kini saya bisa membeli alat pertanian modern yang mempercepat proses panen dan meningkatkan kualitas sayur saya."
-                    </p>
-                    <div class="flex items-center">
-                        <span class="text-primary font-semibold">⭐⭐⭐⭐⭐</span>
-                    </div>
+                    <div class="text-gray-700 mb-4">"Saya sangat terbantu dengan adanya program pembiayaan alat produksi ini. Kini saya bisa membeli alat pertanian modern yang mempercepat proses panen dan meningkatkan kualitas sayur saya."</div>
+                    <div class="flex text-yellow-400 text-lg">★★★★★</div>
                 </div>
-
-                <!-- Testimonial 3 -->
-                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
+                <div class="bg-white rounded-2xl shadow p-8 flex flex-col items-start">
                     <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xl mr-4">
-                            R
-                        </div>
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold mr-3">R</div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Rudi Hartono</h3>
-                            <p class="text-gray-500">Pengusaha Kecil</p>
+                            <div class="font-semibold text-gray-900">Rudi Hartono</div>
+                            <div class="text-xs text-gray-500">Pengusaha Kecil</div>
                         </div>
                     </div>
-                    <p class="text-gray-700 mb-4">
-                        "Proses pengajuan pinjaman di DANA UMKM DESA sangat transparan dan cepat. Saya hanya perlu menunggu 2 hari kerja untuk mendapatkan kepastian. Sangat memuaskan!"
-                    </p>
-                    <div class="flex items-center">
-                        <span class="text-primary font-semibold">⭐⭐⭐⭐⭐</span>
-                    </div>
-                </div>
-
-                <!-- Testimonial 4 -->
-                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xl mr-4">
-                            L
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Lina Marlina</h3>
-                            <p class="text-gray-500">Pedagang Kecil</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-700 mb-4">
-                        "Saya sangat merekomendasikan program ini untuk para pelaku UMKM. Selain bunga rendah, jadwal pembayaran yang fleksibel juga sangat membantu saya dalam mengatur keuangan usaha."
-                    </p>
-                    <div class="flex items-center">
-                        <span class="text-primary font-semibold">⭐⭐⭐⭐⭐</span>
-                    </div>
+                    <div class="text-gray-700 mb-4">"Proses pengajuan pinjaman di DANA UMKM DESA sangat transparan dan cepat. Saya hanya perlu menunggu 2 hari kerja untuk mendapatkan kepastian. Sangat memuaskan!"</div>
+                    <div class="flex text-yellow-400 text-lg">★★★★★</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="py-20 bg-gradient-to-r from-primary to-accent">
+    <section class="py-20 bg-green-500">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-                Siap Mengembangkan Usaha Anda?
-            </h2>
-            <p class="text-lg sm:text-xl text-gray-100 mb-8 max-w-2xl mx-auto">
-                Bergabunglah dengan ribuan UMKM yang telah merasakan manfaat program pembiayaan kami.
-            </p>
-            <a href="{{ route('login') }}" class="inline-block px-8 py-4 bg-white text-primary hover:text-secondary font-semibold rounded-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 transform">
-                Mulai Sekarang
-            </a>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Siap Mengembangkan Usaha Anda?</h2>
+            <p class="text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto">Bergabunglah dengan ribuan UMKM yang telah merasakan manfaat program pembiayaan kami.</p>
+            <a href="{{ route('login') }}" class="inline-block px-8 py-4 bg-white text-green-600 font-semibold rounded-xl shadow-lg hover:bg-gray-100 transition-all duration-300 text-lg">Mulai Sekarang</a>
         </div>
     </section>
 
+    <!-- Chart Data -->
     <script>
+        window.chartData = {!! json_encode([
+            'labels' => $pengajuanByDusun->pluck('dusun')->map(fn($dusun) => "Dusun {$dusun}"),
+            'data' => $pengajuanByDusun->pluck('total')
+        ]) !!};
+    </script>
+
+    <!-- Chart Initialization -->
+    <script>
+        // Create bar chart for approved applications per dusun
+        const statistikCtx = document.getElementById('statistikChart').getContext('2d');
+        const statistikChart = new Chart(statistikCtx, {
+            type: 'bar',
+            data: {
+                labels: window.chartData.labels,
+                datasets: [{
+                    label: 'Jumlah Pengajuan Disetujui',
+                    data: window.chartData.data,
+                    backgroundColor: '#22c55e',
+                    borderColor: '#16a34a',
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    maxBarThickness: 50
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 5,
+                        bottom: 5,
+                        left: 5,
+                        right: 5
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 10,
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            precision: 0,
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            display: true,
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                animation: {
+                    duration: 500
+                }
+            }
+        });
+
         // Mobile menu toggle
         const menuToggle = document.getElementById('menu-toggle');
         const mobileNav = document.getElementById('mobile-nav');
@@ -554,7 +538,115 @@
                 behavior: 'smooth'
             });
         });
+
+        // Chart.js for monthly applications and status distribution
+        const applicationsCtx = document.getElementById('applicationsChart').getContext('2d');
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+
+        // Monthly Applications Chart
+        const applicationsChart = new Chart(applicationsCtx, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode($monthlyLabels) !!},
+                datasets: [{
+                    label: 'Jumlah Pengajuan',
+                    data: {!! json_encode($monthlyData) !!},
+                    backgroundColor: 'rgba(34, 197, 94, 0.2)',
+                    borderColor: '#22c55e',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 10,
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            precision: 0,
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            display: true,
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                animation: {
+                    duration: 500
+                }
+            }
+        });
+
+        // Status Distribution Chart (Doughnut)
+        const statusChart = new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Disetujui', 'Pending', 'Ditolak'],
+                datasets: [{
+                    label: 'Status Pengajuan',
+                    data: [
+                        {{ $statusCounts['approved'] }},
+                        {{ $statusCounts['pending'] }},
+                        {{ $statusCounts['rejected'] }}
+                    ],
+                    backgroundColor: [
+                        '#22c55e',
+                        '#f59e0b',
+                        '#ef4444'
+                    ],
+                    borderWidth: 1,
+                    borderColor: '#fff',
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 10,
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    duration: 500
+                }
+            }
+        });
     </script>
 </body>
-
 </html>
