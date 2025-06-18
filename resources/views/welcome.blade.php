@@ -317,7 +317,7 @@
       <!-- Kanan: Grafik -->
       <div>
         <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
-          <canvas id="statistikChart" class="w-full h-[400px]"></canvas>
+          <canvas id="statistikChart" class="w-[400px] h-[400px] mx-auto"></canvas>
         </div>
       </div>
 
@@ -327,50 +327,61 @@
 
 
     <script>
-        // Fetch and render statistik chart
-        fetch('/statistik-dusun')
-            .then(response => response.json())
-            .then(data => {
-                const ctx = document.getElementById('statistikChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'Jumlah Pengajuan Disetujui',
-                            data: data.data,
-                            backgroundColor: '#22c55e',
-                            borderColor: '#16a34a',
-                            borderWidth: 1,
-                            borderRadius: 8,
-                            maxBarThickness: 50
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Statistik Pengajuan per Dusun'
+    // Fungsi untuk generate warna random pastel
+    function generateColors(count) {
+        const colors = [];
+        for (let i = 0; i < count; i++) {
+            const hue = Math.floor(Math.random() * 360); // hue random
+            colors.push(`hsl(${hue}, 70%, 65%)`); // warna pastel
+        }
+        return colors;
+    }
+
+    fetch('/statistik-dusun')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('statistikChart').getContext('2d');
+            const backgroundColors = generateColors(data.labels.length);
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Jumlah Pengajuan Disetujui',
+                        data: data.data,
+                        backgroundColor: backgroundColors,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#333',
+                                font: {
+                                    size: 14
+                                }
                             }
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    precision: 0
-                                }
+                        title: {
+                            display: true,
+                            text: 'Statistik Pengajuan per Dusun',
+                            color: '#333',
+                            font: {
+                                size: 18
                             }
                         }
                     }
-                });
-            })
-            .catch(error => console.error('Error loading statistics:', error));
-    </script>
+                }
+            });
+        })
+        .catch(error => console.error('Error loading statistics:', error));
+</script>
+
 
     <!-- Process Section -->
     <section class="py-36 bg-gradient-to-br from-primary/5 to-accent/5" id="proses">
