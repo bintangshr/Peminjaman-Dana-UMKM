@@ -175,12 +175,12 @@
         <div class="dashboard-card">
             <div class="card-title">Pending Reviews</div>
             <div class="card-value">{{ $pendingReviews ?? 0 }}</div>
-            <a href="{{ route('admin.pengajuan.index', ['status' => 'pending_review']) }}" class="card-action">Lihat yang pending review</a>
+            <a href="{{ route('admin.pengajuan.index', ['status' => 'pending_review']) }}" class="card-action">Lihat pending review</a>
         </div>
         <div class="dashboard-card">
             <div class="card-title">Approved</div>
             <div class="card-value">{{ $approvedApplicationsCount ?? 0 }}</div>
-            <a href="{{ route('admin.pengajuan.index', ['status' => 'approved']) }}" class="card-action">Lihat yang sudah di-approve</a>
+            <a href="{{ route('admin.pengajuan.index', ['status' => 'approved']) }}" class="card-action">Lihat sudah di approve</a>
         </div>
         <div class="dashboard-card">
             <div class="card-title">Total Users</div>

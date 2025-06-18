@@ -187,7 +187,7 @@
     <div class="admin-container">
         <aside class="sidebar">
             <div class="sidebar-logo">
-                <h1>{{ config('app.name', 'Laravel') }}</h1>
+                <h1>ADMIN</h1>
             </div>
             
             <nav>
@@ -195,21 +195,6 @@
                     <li class="nav-item">
                         <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                             Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            Applications
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            Users
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            Settings
                         </a>
                     </li>
                 </ul>
