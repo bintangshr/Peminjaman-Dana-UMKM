@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\UserController; // Pastikan UserController di-import
 
@@ -13,7 +13,9 @@ use App\Http\Controllers\UserController; // Pastikan UserController di-import
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $pengajuanController = new \App\Http\Controllers\PengajuanController();
+    $data = $pengajuanController->getPublicStatistics();
+    return view('welcome')->with($data);
 });
 
 // Endpoint untuk statistik pengajuan per dusun (public)
@@ -45,7 +47,7 @@ Route::middleware('auth')->group(function () {
 // Rute Khusus Admin
 Route::middleware(['auth', 'admin', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard Admin
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
     // Rute admin untuk mengelola semua pengajuan
     Route::prefix('pengajuan')->name('pengajuan.')->group(function () {

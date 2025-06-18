@@ -188,7 +188,7 @@
                         @if ($errors->has('password'))
                             <div class="mt-2 text-sm text-red-600">
                                 {{ $errors->first('password') }}
-                            </div>
+                            </div> 
                         @endif
                     </div>
                 </div>
@@ -220,7 +220,6 @@
                         Daftar
                     </button>
                 </div>
-
             </form>
         </div>
     </div>

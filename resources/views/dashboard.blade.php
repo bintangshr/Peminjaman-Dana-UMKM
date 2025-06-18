@@ -2,11 +2,6 @@
 
 @section('title', 'Dashboard')
 
-@push('scripts')
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-@endpush
-
 @section('content')
 <!-- Hero Section -->
 <section class="relative min-h-screen flex items-center justify-center hero-pattern" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('/images/hero1.jpg') no-repeat center center; background-size: cover;">
@@ -72,6 +67,9 @@
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
                 Proses <span class="gradient-text">Pengajuan</span>
             </h2>
+            <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+                Proses pengajuan pinjaman yang mudah, cepat, dan transparan dalam 4 langkah sederhana.
+            </p>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <!-- Step 1 -->
@@ -143,15 +141,9 @@
 
 <script>
     // Fetch and render statistik chart
-    fetch('/statistik-dusun?_=' + new Date().getTime())
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+    fetch('/statistik-dusun')
+        .then(response => response.json())
         .then(data => {
-            console.log('Statistics data:', data); // Debug log
             const ctx = document.getElementById('statistikChart').getContext('2d');
             new Chart(ctx, {
                 type: 'bar',
@@ -184,105 +176,4 @@
                             beginAtZero: true,
                             ticks: {
                                 precision: 0
-                            }
-                        }
-                    }
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Error loading statistics:', error);
-            document.getElementById('statistikChart').insertAdjacentHTML('afterend', 
-                '<div class="text-red-500 text-center mt-4">Error loading statistics. Please check the console for details.</div>'
-            );
-        });
-</script>
-
-<!-- Testimonials Section -->
-<section class="py-20 bg-gradient-to-br from-gray-50 to-white" id="testimoni">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                Apa Kata Mereka <span class="gradient-text">Tentang Kami</span>
-            </h2>
-            <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-                Testimoni dari para pelaku UMKM yang telah merasakan manfaat dari program kami.
-            </p>
-        </div>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Testimonial 1 -->
-            <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xl mr-4">
-                        A
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Ahmad Fauzi</h3>
-                        <p class="text-gray-500">Pemilik Toko Oleh-Oleh</p>
-                    </div>
-                </div>
-                <p class="text-gray-700 mb-4">
-                    "Program pinjaman modal usaha sangat membantu saya dalam mengembangkan toko oleh-oleh khas daerah. Prosesnya cepat dan mudah, serta bunganya yang rendah membuat saya terbantu sekali."
-                </p>
-                <div class="flex items-center">
-                    <span class="text-primary font-semibold">⭐⭐⭐⭐⭐</span>
-                </div>
-            </div>
-
-            <!-- Testimonial 2 -->
-            <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xl mr-4">
-                        S
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Siti Aminah</h3>
-                        <p class="text-gray-500">Petani Sayur Organik</p>
-                    </div>
-                </div>
-                <p class="text-gray-700 mb-4">
-                    "Saya sangat terbantu dengan adanya program pembiayaan alat produksi ini. Kini saya bisa membeli alat pertanian modern yang mempercepat proses panen dan meningkatkan kualitas sayur saya."
-                </p>
-                <div class="flex items-center">
-                    <span class="text-primary font-semibold">⭐⭐⭐⭐⭐</span>
-                </div>
-            </div>
-
-            <!-- Testimonial 3 -->
-            <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xl mr-4">
-                        R
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Rudi Hartono</h3>
-                        <p class="text-gray-500">Pengusaha Kecil</p>
-                    </div>
-                </div>
-                <p class="text-gray-700 mb-4">
-                    "Proses pengajuan pinjaman di DANA UMKM DESA sangat transparan dan cepat. Saya hanya perlu menunggu 2 hari kerja untuk mendapatkan kepastian. Sangat memuaskan!"
-                </p>
-                <div class="flex items-center">
-                    <span class="text-primary font-semibold">⭐⭐⭐⭐⭐</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- CTA Section -->
-<section class="py-20 bg-gradient-to-r from-primary to-accent">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-            Siap Mengembangkan Usaha Anda?
-        </h2>
-        <p class="text-lg sm:text-xl text-gray-100 mb-8 max-w-2xl mx-auto">
-            Bergabunglah dengan ribuan UMKM yang telah merasakan manfaat program pembiayaan kami.
-        </p>
-        <a href="{{ url('datadiri') }}" class="inline-block px-8 py-4 bg-white text-primary hover:text-secondary font-semibold rounded-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 transform">
-            Mulai Sekarang
-        </a>
-    </div>
-</section>
-@endsection
+                           

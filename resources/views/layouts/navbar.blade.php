@@ -13,15 +13,14 @@
 
             <!-- Desktop Navigation -->
             <nav class="hidden lg:flex items-center space-x-8">
-                <ul class="flex items-center space-x-8">
-                    @if(Auth::user()->role == 'admin')
+                <ul class="flex items-center space-x-8">                    @if(Auth::check() && Auth::user()->role == 'admin')
                         <li>
                             <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group">
                                 Admin Dashboard
                                 <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
                             </a>
                         </li>
-                    @else
+                    @elseif(Auth::check())
                         <li>
                             <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group">
                                 Beranda
@@ -47,9 +46,8 @@
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
                         </a>
                     </li>
-                </ul>
-
-                <!-- User Menu -->
+                </ul>                <!-- User Menu -->
+                @auth
                 <div class="relative">
                     <button onclick="toggleDropdown()" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-accent text-white font-medium rounded-lg hover:from-secondary hover:to-primary transition-all duration-300">
                         {{ Auth::user()->name }}
@@ -57,6 +55,12 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
+                @else
+                <div class="relative">
+                    <a href="{{ route('login') }}" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-accent text-white font-medium rounded-lg hover:from-secondary hover:to-primary transition-all duration-300">
+                        Login
+                    </a>
+                @endauth
 
                     <div id="dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
                         <a href="{{ route('profile.edit') }}" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors duration-300">

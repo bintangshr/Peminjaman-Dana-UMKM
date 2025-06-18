@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse; // <-- DITAMBAHKAN
-use Illuminate\Support\Facades\DB;   // <-- DITAMBAHKAN
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class PengajuanController extends Controller
 {
@@ -20,16 +20,14 @@ class PengajuanController extends Controller
     {
         $user = Auth::user();
         if ($user->role == 'admin') {
-            // Admin bisa melihat semua jika mengakses /status.
-            // Atau, jika Anda ingin halaman /status hanya untuk user, redirect admin ke admin.pengajuan.index
-            // return redirect()->route('admin.pengajuan.index');
-            $pengajuanItems = Pengajuan::orderBy('tgl_pengajuan', 'desc')->orderBy('created_at', 'desc')->paginate(10); // Contoh paginasi
+            $pengajuanItems = Pengajuan::orderBy('tgl_pengajuan', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
         } else {
-            // User biasa hanya melihat pengajuannya berdasarkan email
             $pengajuanItems = Pengajuan::where('email', $user->email)
-                                        ->orderBy('tgl_pengajuan', 'desc')
-                                        ->orderBy('created_at', 'desc')
-                                        ->paginate(10); // Contoh paginasi
+                ->orderBy('tgl_pengajuan', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
         }
         return view('pinjaman.status', compact('pengajuanItems'));
     }
@@ -37,21 +35,47 @@ class PengajuanController extends Controller
     /**
      * Menampilkan daftar semua pengajuan untuk Admin dengan paginasi.
      */
-    public function indexAdmin(Request $request): View // Tambahkan Request untuk filter
+    public function indexAdmin(Request $request): View
     {
-        $query = Pengajuan::orderBy('tgl_pengajuan', 'desc')->orderBy('created_at', 'desc');
+        $query = Pengajuan::query();
 
-        // Contoh implementasi filter status sederhana
-        if ($request->has('status_filter') && $request->status_filter != '') {
-            if ($request->status_filter == 'pending') { // Jika filter 'pending' mencakup beberapa status
-                 $query->whereIn('status', ['pending_review', 'pending_detail_usaha']);
+        // Filter berdasarkan status
+        if ($request->filled('status_filter')) {
+            $status = $request->status_filter;
+            if ($status === 'pending') {
+                $query->whereIn('status', ['pending_review', 'pending_detail_usaha']);
             } else {
-                $query->where('status', $request->status_filter);
+                $query->where('status', $status);
             }
         }
 
-        $pengajuanItems = $query->paginate(10); // Ganti get() dengan paginate(), misal 10 item per halaman
-        return view('admin.pengajuan.index', compact('pengajuanItems'));
+        // Filter berdasarkan tanggal
+        if ($request->filled('date_filter')) {
+            $dateFilter = $request->date_filter;
+            switch ($dateFilter) {
+                case 'today':
+                    $query->whereDate('created_at', today());
+                    break;
+                case 'week':
+                    $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+                    break;
+                case 'month':
+                    $query->whereMonth('created_at', now()->month)
+                        ->whereYear('created_at', now()->year);
+                    break;
+                case 'year':
+                    $query->whereYear('created_at', now()->year);
+                    break;
+            }
+        }
+
+        // Pengurutan
+        $query->orderBy('created_at', 'desc');
+
+        // Mengambil data dengan paginasi
+        $pengajuans = $query->paginate(10)->withQueryString();
+
+        return view('admin.pengajuan.index', compact('pengajuans'));
     }
 
     /**
@@ -252,18 +276,84 @@ class PengajuanController extends Controller
      */
     public function getStatistikPerDusun(): JsonResponse
     {
-        $statistik = Pengajuan::select('dusun', DB::raw('count(*) as total'))
-            ->whereIn('status', ['approved', 'completed'])
+        $data = Pengajuan::select('dusun', DB::raw('count(*) as total'))
             ->groupBy('dusun')
             ->orderBy('dusun')
             ->get();
 
-        $labels = $statistik->pluck('dusun')->toArray();
-        $data = $statistik->pluck('total')->toArray();
-
         return response()->json([
-            'labels' => $labels,
-            'data' => $data
+            'labels' => $data->pluck('dusun')->map(function($dusun) { 
+                return 'Dusun ' . $dusun; 
+            }),
+            'data' => $data->pluck('total'),
         ]);
+    }
+
+    /**
+     * Get public statistics for the welcome page
+     */
+    public function getPublicStatistics(): array
+    {
+        $totalPengajuan = Pengajuan::count();
+        $approvedPengajuan = Pengajuan::where('status', 'approved')->count();
+        
+        // Get only approved applications per dusun
+        // Get all possible dusun values
+        $dusunList = ['BEJEN', 'BAREPAN', 'NGENTAK', 'BROJONALAN', 'GEDONGAN', 'SOROPADAN', 'TINGAL', 'JOWAHAN'];
+        
+        // Get approved applications per dusun
+        $approvedByDusun = Pengajuan::select('dusun', DB::raw('count(*) as total'))
+            ->where('status', 'approved')
+            ->groupBy('dusun')
+            ->orderBy('dusun')
+            ->pluck('total', 'dusun')
+            ->toArray();
+
+        // Create collection with all dusun values, defaulting to 0 if no approved applications
+        $pengajuanByDusun = collect($dusunList)->map(function ($dusun) use ($approvedByDusun) {
+            return [
+                'dusun' => $dusun,
+                'total' => $approvedByDusun[$dusun] ?? 0
+            ];
+        });
+
+        $recentPengajuan = Pengajuan::select('nama', 'dusun', 'status', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+        
+        // Statistik bulanan (12 bulan terakhir)
+        $monthlyLabels = [];
+        $monthlyData = [];
+        $now = now();
+        for ($i = 11; $i >= 0; $i--) {
+            $date = $now->copy()->subMonths($i);
+            $label = $date->format('M Y');
+            $monthlyLabels[] = $label;
+            $monthlyData[] = Pengajuan::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+        }
+
+        // Status count
+        $statusCounts = [
+            'approved' => Pengajuan::where('status', 'approved')->count(),
+            'pending' => Pengajuan::whereIn('status', ['pending_review', 'pending_detail_usaha'])->count(),
+            'rejected' => Pengajuan::where('status', 'rejected')->count(),
+        ];
+        $pendingPengajuan = $statusCounts['pending'];
+        $rejectedPengajuan = $statusCounts['rejected'];
+
+        return [
+            'totalPengajuan' => $totalPengajuan,
+            'approvedPengajuan' => $approvedPengajuan,
+            'pengajuanByDusun' => $pengajuanByDusun,
+            'recentPengajuan' => $recentPengajuan,
+            'monthlyLabels' => $monthlyLabels,
+            'monthlyData' => $monthlyData,
+            'statusCounts' => $statusCounts,
+            'pendingPengajuan' => $pendingPengajuan,
+            'rejectedPengajuan' => $rejectedPengajuan,
+        ];
     }
 }
