@@ -1,248 +1,122 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UMKM Desa - Peminjaman Dana</title>
 
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Custom Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#16a34a',
+                        secondary: '#15803d',
+                        accent: '#22c55e',
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.6s ease-out',
+                        'fade-in-down': 'fadeInDown 0.6s ease-out',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Animation CSS -->
     <style>
-        :root {
-            --primary: #2E7D32;
-            --primary-light: #4CAF50;
-            --secondary: #8BC34A;
-            --light: #F1F8E9;
-            --dark: #1B5E20;
-            --text-dark: #333333;
-            --text-light: #FFFFFF;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-            --border-radius: 8px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--light), #e8f5e9);
-            color: var(--text-dark);
-            line-height: 1.6;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 400px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        h2 {
-            color: var(--primary);
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .logo-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .logo-text {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .input-group {
-            margin-bottom: 1.2rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-
-        input {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
-        }
-
-        .error-message {
-            color: #d32f2f;
-            font-size: 0.85rem;
-            display: block;
-            margin-top: 0.3rem;
-        }
-
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.9rem;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: var(--transition);
-            width: 100%;
-        }
-
-        .btn:hover {
-            background-color: var(--dark);
-            transform: translateY(-2px);
-        }
-
-        p {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #666;
-        }
-
-        a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        a:hover {
-            color: var(--dark);
-            text-decoration: underline;
-        }
-
-        .forgot-password {
-            text-align: right;
-            margin: -0.5rem 0 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .login-divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
-        }
-
-        .login-divider span {
-            flex: 1;
-            height: 1px;
-            background-color: #ddd;
-        }
-
-        .login-divider p {
-            padding: 0 10px;
-            color: #777;
-            font-size: 0.9rem;
-            margin: 0;
-        }
-
-        .home-link {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-weight: 500;
-        }
-
-        .home-link:hover {
-            color: var(--dark);
-        }
-
-        @media (max-width: 480px) {
-            .container { padding: 1.5rem; margin: 0 1rem; }
-            h2 { font-size: 1.5rem; }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
+</head>
 
-    <a href="/" class="home-link">← Kembali ke Beranda</a>
 
-    <div class="container">
-        <div class="logo">
-            <div class="logo-icon">🌾</div>
-            <div class="logo-text">DANA UMKM DESA</div>
+
+<div class="min-h-screen flex items-center justify-center px-4 bg-[url('/images/hero1.jpg')] bg-cover bg-center bg-no-repeat relative">
+    <div class="absolute inset-0 bg-black/40 z-10"></div>
+
+    <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-10 space-y-8 z-20">
+        <!-- Back to Home -->
+    <a href="/" class="absolute top-6 left-6 text-xl text-white hover:text-gray-100 transition-colors duration-300 flex items-center gap-2 group">
+    <svg class="w-5 h-5 transform transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+    </svg>
+    <span>Kembali ke Beranda</span>
+    </a>
+
+        <!-- Logo -->
+        <div class="text-center">
+            <div class="text-5xl mb-2">🌾</div>
+            <h1 class="text-3xl font-bold text-green-500">DANA UMKM DESA</h1>
+            <h2 class="text-gray-500 mt-2 ">Login Pengguna</h2>
         </div>
 
-     <h2>Login Pengguna</h2>
+        
 
-<!-- GLOBAL ERROR -->
-@if ($errors->any())
-    <div class="error-message" style="text-align: center; margin-bottom: 1rem;">
-        {{ $errors->first() }}
-    </div>
-@endif
-
-<!-- Session Status -->
-@if (session('status'))
-    <div class="error-message" style="color: green; text-align:center; margin-bottom: 10px;">
-        {{ session('status') }}
-    </div>
-@endif
-
-<form method="POST" action="{{ route('login') }}">
-
-    @csrf
-
-    <div class="input-group">
-        <label for="email">Email:</label>
-        <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
-        @error('email')
-            <span class="error-message">{{ $message }}</span>
-        @enderror
-    </div>
-
-    <div class="input-group">
-        <label for="password">Password:</label>
-        <input id="password" type="password" name="password" required>
-        @error('password')
-            <span class="error-message">{{ $message }}</span>
-        @enderror
-    </div>
-
-    <div class="forgot-password">
-        @if (Route::has('password.request'))
-            <a href="{{ route('password.request') }}">Lupa password?</a>
+        @if ($errors->any())
+            <div class="text-red-400 text-base text-center">
+                {{ $errors->first() }}
+            </div>
         @endif
-    </div>
 
-    <button type="submit" class="btn">Login</button>
-</form>
+        @if (session('status'))
+            <div class="text-green-400 text-base text-center">
+                {{ session('status') }}
+            </div>
+        @endif
 
-        <div class="login-divider">
-            <span></span>
-            <p>atau</p>
-            <span></span>   
+        <form method="POST" action="{{ route('login') }}" class="space-y-6">
+            @csrf
+
+            <div>
+                <label for="email" class="block text-lg font-medium">Email</label>
+                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
+                    class="mt-2 w-full px-4 py-3 text-black border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-600 shadow-sm" />
+                @error('email')
+                    <span class="text-sm text-red-300">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div>
+                <label for="password" class="block text-lg font-medium">Password</label>
+                <input id="password" type="password" name="password" required
+                    class="mt-2 w-full px-4 py-3 text-black border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-600 shadow-sm" />
+                @error('password')
+                    <span class="text-sm text-red-300">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="text-right text-base">
+                @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}" class="text-green-500 hover:underline">Lupa password?</a>
+                @endif
+            </div>
+
+            <button type="submit"
+                class="w-full py-3 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200 font-semibold text-lg">
+                Login
+            </button>
+        </form>
+
+        <div class="flex items-center my-4">
+            <span class="flex-grow h-px bg-gray-300"></span>
+            <p class="px-3 text-gray-300 text-base">atau</p>
+            <span class="flex-grow h-px bg-gray-300"></span>
         </div>
 
-        <p>Belum punya akun? <a href="{{ route('register') }}">Daftar</a></p>
+        <p class="text-center text-lg">
+            Belum punya akun? 
+            <a href="{{ route('register') }}" class="text-green-500 hover:underline font-semibold">Daftar</a>
+        </p>
     </div>
-
+</div>
