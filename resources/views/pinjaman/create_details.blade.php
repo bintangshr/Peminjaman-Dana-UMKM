@@ -6,26 +6,66 @@
     </h2>
 @endsection
 
+@push('styles')
+<style>
+    :root {
+        --tw-primary: #16a34a;
+        --tw-accent: #22c55e;
+    }
+    
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .gradient-text {
+        background: linear-gradient(135deg, var(--tw-primary), var(--tw-accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+        border-color: var(--tw-primary);
+        box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+    }
+    
+    .form-radio:checked {
+        background-color: var(--tw-primary);
+        border-color: var(--tw-primary);
+    }
+    
+    .form-radio:focus {
+        --tw-ring-color: rgba(22, 163, 74, 0.2);
+    }
+</style>
+@endpush
+
 @section('content')
-<div class="py-12">
-    <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 md:p-8 bg-white dark:bg-gray-800">
-                <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2 text-center">Formulir Detail Usaha & Pinjaman</h1>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-6 text-center">
-                    NID Pengajuan: {{ $pengajuan->nid }} - Pemohon: {{ $pengajuan->nama }}
-                </p>
+<div class="relative min-h-screen">
+    <div class="relative pt-24 pb-6 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="glass-effect rounded-3xl shadow-xl overflow-hidden">
+                <div class="p-6 sm:p-10">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl sm:text-5xl font-bold mb-4">
+                            Detail <span class="gradient-text">Usaha & Pinjaman</span>
+                        </h1>
+                        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                            NID Pengajuan: {{ $pengajuan->nid }} - Pemohon: {{ $pengajuan->nama }}
+                        </p>
+                    </div>
 
                 @if (session('success'))
                     <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                         {{ session('success') }}
                     </div>
-                @endif
-
-                @if ($errors->any())
-                    <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                        <strong class="font-bold">Oops! Ada kesalahan:</strong>
-                        <ul class="mt-1 list-disc list-inside">
+                @endif                @if ($errors->any())
+                    <div class="mb-6 bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl" role="alert">
+                        <p class="font-semibold text-base">Oops! Terjadi Kesalahan</p>
+                        <ul class="mt-2 list-disc list-inside text-sm space-y-1">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
@@ -34,90 +74,122 @@
                 @endif
 
                 <form id="PengajuanDetailForm" action="{{ route('pinjaman.storeDetails', ['pengajuan_nid' => $pengajuan->nid]) }}" method="post" enctype="multipart/form-data" class="space-y-6">
-                    @csrf
+                    @csrf                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="nama_usaha" class="block text-sm font-medium text-gray-700">Nama Usaha Yang Diajukan</label>
+                            <input type="text" id="nama_usaha" name="nama_usaha" value="{{ old('nama_usaha', $pengajuan->nama_usaha) }}" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                placeholder:text-gray-400" placeholder="Contoh: Warung Sembako Berkah">
+                        </div>
+                        <div>
+                            <label for="jenis_usaha" class="block text-sm font-medium text-gray-700">Jenis Usaha</label>
+                            <select id="jenis_usaha" name="jenis_usaha" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all">
+                                <option value="">- Pilih Jenis Usaha -</option>
+                                <option value="kuliner" {{ old('jenis_usaha', $pengajuan->jenis_usaha) == 'kuliner' ? 'selected' : '' }}>Usaha Kuliner</option>
+                                <option value="furnitur" {{ old('jenis_usaha', $pengajuan->jenis_usaha) == 'furnitur' ? 'selected' : '' }}>Furnitur dan Peralatan Rumah Tangga</option>
+                                <option value="pakaian" {{ old('jenis_usaha', $pengajuan->jenis_usaha) == 'pakaian' ? 'selected' : '' }}>Pakaian dan Souvenir</option>
+                                <option value="perkebunan" {{ old('jenis_usaha', $pengajuan->jenis_usaha) == 'perkebunan' ? 'selected' : '' }}>Perkebunan</option>
+                            </select>
+                        </div>
+                    </div>
 
-                    <div>
-                        <label for="nama_usaha" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nama Usaha Yang Diajukan</label>
-                        <input type="text" id="nama_usaha" name="nama_usaha" value="{{ old('nama_usaha', $pengajuan->nama_usaha) }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="tujuan_pendanaan" class="block text-sm font-medium text-gray-700">Tujuan Pendanaan</label>
+                            <select id="tujuan_pendanaan" name="tujuan_pendanaan" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all">
+                                <option value="">- Pilih Tujuan -</option>
+                                <option value="modal" {{ old('tujuan_pendanaan', $pengajuan->tujuan_pendanaan) == 'modal' ? 'selected' : '' }}>Modal Usaha</option>
+                                <option value="pengembangan" {{ old('tujuan_pendanaan', $pengajuan->tujuan_pendanaan) == 'pengembangan' ? 'selected' : '' }}>Mengembangkan Usaha</option>
+                                <option value="investasi" {{ old('tujuan_pendanaan', $pengajuan->tujuan_pendanaan) == 'investasi' ? 'selected' : '' }}>Investasi</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="nominal" class="block text-sm font-medium text-gray-700">Ekspektasi Nominal Pendanaan (Rp)</label>
+                            <input type="number" id="nominal" name="nominal" value="{{ old('nominal', $pengajuan->nominal) }}" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                placeholder:text-gray-400" placeholder="Contoh: 5000000">
+                            <p class="mt-1 text-sm text-gray-500">Maksimal pinjaman Rp. 10.000.000</p>
+                        </div>
+                    </div>                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="norek" class="block text-sm font-medium text-gray-700">Nomor Rekening Tujuan</label>
+                            <input type="text" id="norek" name="norek" value="{{ old('norek', $pengajuan->norek) }}" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                placeholder:text-gray-400" placeholder="Contoh: 1234567890">
+                        </div>
+                        <div>
+                            <label for="bank" class="block text-sm font-medium text-gray-700">Nama Bank</label>
+                            <select id="bank" name="bank" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all">
+                                <option value="">- Pilih Bank -</option>
+                                <option value="BCA" {{ old('bank', $pengajuan->bank) == 'BCA' ? 'selected' : '' }}>BCA</option>
+                                <option value="BNI" {{ old('bank', $pengajuan->bank) == 'BNI' ? 'selected' : '' }}>BNI</option>
+                                <option value="Mandiri" {{ old('bank', $pengajuan->bank) == 'Mandiri' ? 'selected' : '' }}>Mandiri</option>
+                                <option value="BRI" {{ old('bank', $pengajuan->bank) == 'BRI' ? 'selected' : '' }}>BRI</option>
+                                <option value="BSI" {{ old('bank', $pengajuan->bank) == 'BSI' ? 'selected' : '' }}>BSI</option>
+                                <option value="BTN" {{ old('bank', $pengajuan->bank) == 'BTN' ? 'selected' : '' }}>BTN</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="pemilik_rekening" class="block text-sm font-medium text-gray-700">Nama Pemilik Rekening</label>
+                            <input type="text" id="pemilik_rekening" name="pemilik_rekening" value="{{ old('pemilik_rekening', $pengajuan->pemilik_rekening) }}" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                placeholder:text-gray-400" placeholder="Nama sesuai buku tabungan">
+                        </div>
+                        <div>
+                            <label for="tenor" class="block text-sm font-medium text-gray-700">Durasi Tenor</label>
+                            <select id="tenor" name="tenor" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all">
+                                <option value="">- Pilih Tenor -</option>
+                                <option value="3" {{ old('tenor', $pengajuan->tenor) == '3' ? 'selected' : '' }}>3 bulan</option>
+                                <option value="6" {{ old('tenor', $pengajuan->tenor) == '6' ? 'selected' : '' }}>6 bulan</option>
+                                <option value="12" {{ old('tenor', $pengajuan->tenor) == '12' ? 'selected' : '' }}>1 tahun (12 bulan)</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div>
-                        <label for="jenis_usaha" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Jenis Usaha</label>
-                        <select id="jenis_usaha" name="jenis_usaha" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                            <option value="">- Pilih Jenis Usaha -</option>
-                            <option value="kuliner" {{ old('jenis_usaha', $pengajuan->jenis_usaha) == 'kuliner' ? 'selected' : '' }}>Usaha Kuliner</option>
-                            <option value="furnitur" {{ old('jenis_usaha', $pengajuan->jenis_usaha) == 'furnitur' ? 'selected' : '' }}>Furnitur dan Peralatan Rumah Tangga</option>
-                            <option value="pakaian" {{ old('jenis_usaha', $pengajuan->jenis_usaha) == 'pakaian' ? 'selected' : '' }}>Pakaian dan Souvenir</option>
-                            <option value="perkebunan" {{ old('jenis_usaha', $pengajuan->jenis_usaha) == 'perkebunan' ? 'selected' : '' }}>Perkebunan</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="tujuan_pendanaan" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Tujuan Pendanaan</label>
-                        <select id="tujuan_pendanaan" name="tujuan_pendanaan" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                            <option value="">- Pilih Tujuan -</option>
-                            <option value="modal" {{ old('tujuan_pendanaan', $pengajuan->tujuan_pendanaan) == 'modal' ? 'selected' : '' }}>Modal Usaha</option>
-                            <option value="pengembangan" {{ old('tujuan_pendanaan', $pengajuan->tujuan_pendanaan) == 'pengembangan' ? 'selected' : '' }}>Mengembangkan Usaha</option>
-                            <option value="investasi" {{ old('tujuan_pendanaan', $pengajuan->tujuan_pendanaan) == 'investasi' ? 'selected' : '' }}>Investasi</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="nominal" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Ekspektasi Nominal Pendanaan (Rp)</label>
-                        <input type="number" id="nominal" name="nominal" value="{{ old('nominal', $pengajuan->nominal) }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                    </div>
-
-                    <div>
-                        <label for="norek" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nomor Rekening Tujuan</label>
-                        <input type="text" id="norek" name="norek" value="{{ old('norek', $pengajuan->norek) }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                    </div>
-
-                    <div>
-                        <label for="bank" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nama Bank</label>
-                        <select id="bank" name="bank" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                            <option value="">- Pilih Bank -</option>
-                            <option value="BCA" {{ old('bank', $pengajuan->bank) == 'BCA' ? 'selected' : '' }}>BCA</option>
-                            <option value="BNI" {{ old('bank', $pengajuan->bank) == 'BNI' ? 'selected' : '' }}>BNI</option>
-                            <option value="Mandiri" {{ old('bank', $pengajuan->bank) == 'Mandiri' ? 'selected' : '' }}>Mandiri</option>
-                            <option value="BRI" {{ old('bank', $pengajuan->bank) == 'BRI' ? 'selected' : '' }}>BRI</option>
-                            <option value="BSI" {{ old('bank', $pengajuan->bank) == 'BSI' ? 'selected' : '' }}>BSI</option>
-                            <option value="BTN" {{ old('bank', $pengajuan->bank) == 'BTN' ? 'selected' : '' }}>BTN</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="pemilik_rekening" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nama Pemilik Rekening</label>
-                        <input type="text" id="pemilik_rekening" name="pemilik_rekening" value="{{ old('pemilik_rekening', $pengajuan->pemilik_rekening) }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                    </div>
-
-                    <div>
-                        <label for="tenor" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Durasi Tenor</label>
-                        <select id="tenor" name="tenor" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                            <option value="">- Pilih Tenor -</option>
-                            <option value="3" {{ old('tenor', $pengajuan->tenor) == '3' ? 'selected' : '' }}>3 bulan</option>
-                            <option value="6" {{ old('tenor', $pengajuan->tenor) == '6' ? 'selected' : '' }}>6 bulan</option>
-                            <option value="12" {{ old('tenor', $pengajuan->tenor) == '12' ? 'selected' : '' }}>1 tahun (12 bulan)</option>
-                            {{-- Jika ada tenor lain, misalnya 24 untuk 2 tahun --}}
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="proposal" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Proposal Bisnis UMKM (PDF)</label>
-                        <input type="file" id="proposal" name="proposal" accept=".pdf" {{ $pengajuan->proposal_path ? '' : 'required' }} class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                        <label for="proposal" class="block text-sm font-medium text-gray-700">Proposal Bisnis UMKM (PDF)</label>
+                        <input type="file" id="proposal" name="proposal" accept=".pdf" {{ $pengajuan->proposal_path ? '' : 'required' }} 
+                            class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                            focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                            file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 
+                            file:text-sm file:font-medium file:bg-green-50 file:text-green-700 
+                            hover:file:bg-green-100 cursor-pointer">
                         @if($pengajuan->proposal_path)
                         <p class="text-xs text-gray-500 mt-1">Proposal sudah diunggah: <a href="{{ Storage::url($pengajuan->proposal_path) }}" target="_blank" class="text-indigo-500 hover:underline">Lihat Proposal</a>. Unggah file baru untuk mengganti.</p>
                         @endif
-                    </div>
-
-                    <div class="mt-4">
+                    </div>                    <div class="mt-8">
                         <label for="setuju" class="inline-flex items-center">
-                            <input type="checkbox" id="setuju" name="setuju" required class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800">
-                            <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Dengan ini, saya menyatakan bahwa data yang saya isi dalam formulir ini adalah benar...</span>
+                            <input type="checkbox" id="setuju" name="setuju" required 
+                                class="w-4 h-4 border border-gray-200 text-green-600 rounded
+                                focus:ring-2 focus:ring-green-200 focus:ring-offset-0 transition-all">
+                            <span class="ms-2 text-sm text-gray-600">Dengan ini, saya menyatakan bahwa data yang saya isi dalam formulir ini adalah benar dan dapat dipertanggungjawabkan</span>
                         </label>
                     </div>
 
-                    <div class="mt-6">
-                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500 active:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                    <div class="flex items-center justify-center mt-12">
+                        <button type="submit" 
+                            class="w-full sm:w-auto px-8 py-4 text-lg font-semibold text-white 
+                            bg-gradient-to-r from-green-600 to-green-500 
+                            hover:from-green-700 hover:to-green-600
+                            rounded-xl shadow-lg shadow-green-500/30
+                            transform transition-all duration-300
+                            hover:shadow-xl hover:shadow-green-500/40 hover:scale-[1.02]
+                            focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                             Kirim Pengajuan Lengkap
                         </button>
                     </div>

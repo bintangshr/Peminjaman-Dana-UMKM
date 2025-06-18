@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse; // <-- DITAMBAHKAN
+use Illuminate\Support\Facades\DB;   // <-- DITAMBAHKAN
 
 class PengajuanController extends Controller
 {
@@ -25,9 +27,9 @@ class PengajuanController extends Controller
         } else {
             // User biasa hanya melihat pengajuannya berdasarkan email
             $pengajuanItems = Pengajuan::where('email', $user->email)
-                                     ->orderBy('tgl_pengajuan', 'desc')
-                                     ->orderBy('created_at', 'desc')
-                                     ->paginate(10); // Contoh paginasi
+                                        ->orderBy('tgl_pengajuan', 'desc')
+                                        ->orderBy('created_at', 'desc')
+                                        ->paginate(10); // Contoh paginasi
         }
         return view('pinjaman.status', compact('pengajuanItems'));
     }
@@ -222,5 +224,46 @@ class PengajuanController extends Controller
         }
         $pengajuan->delete();
         return redirect()->route('admin.pengajuan.index')->with('success', 'Data pengajuan berhasil dihapus.');
+    }
+
+    /**
+     * Menyediakan data untuk chart berdasarkan dusun. (METODE BARU)
+     */
+    public function getApprovedByDusunData(): JsonResponse
+    {
+        $data = Pengajuan::whereIn('status', ['approved', 'completed'])
+            ->select('dusun', DB::raw('count(*) as total'))
+            ->groupBy('dusun')
+            ->orderBy('dusun')
+            ->get();
+
+        // Mengambil label (dusun) dan data (total) dari hasil query
+        $labels = $data->pluck('dusun');
+        $data = $data->pluck('total');
+
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Mengambil statistik pengajuan yang disetujui per dusun.
+     */
+    public function getStatistikPerDusun(): JsonResponse
+    {
+        $statistik = Pengajuan::select('dusun', DB::raw('count(*) as total'))
+            ->whereIn('status', ['approved', 'completed'])
+            ->groupBy('dusun')
+            ->orderBy('dusun')
+            ->get();
+
+        $labels = $statistik->pluck('dusun')->toArray();
+        $data = $statistik->pluck('total')->toArray();
+
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data
+        ]);
     }
 }

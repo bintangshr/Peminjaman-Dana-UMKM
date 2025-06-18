@@ -16,6 +16,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Endpoint untuk statistik pengajuan per dusun (public)
+Route::get('/statistik-dusun', [PengajuanController::class, 'getStatistikPerDusun'])->name('statistik.dusun');
+
 // Rute untuk dashboard pengguna biasa
 Route::get('/dashboard', function () {
     return view('dashboard');

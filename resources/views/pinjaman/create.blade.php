@@ -1,24 +1,97 @@
-@extends('layouts.app') {{-- Atau layout lain yang sesuai --}}
+@extends('layouts.app')
 
-@section('header')
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('Formulir Pengajuan Dana UMKM') }}
-        <link rel="stylesheet" href="datadiri.css">
-    </h2>
-@endsection
+@push('styles')
+<style>
+    :    <div class="relative pt-24 pb-6 px-4 sm:px-6 lg:px-8">
+        <!-- Back to Home Button - Fixed Position -->
+        <div class="fixed top-24 left-4 z-10">
+            <a href="{{ url('dashboard') }}" 
+                class="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200 shadow-sm{
+        --tw-primary: #16a34a;
+        --tw-accent: #22c55e;
+    }
+    
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .gradient-text {
+        background: linear-gradient(135deg, var(--tw-primary), var(--tw-accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+        border-color: var(--tw-primary);
+        box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+    }
+    
+    .form-radio:checked {
+        background-color: var(--tw-primary);
+        border-color: var(--tw-primary);
+    }
+    
+    .form-radio:focus {
+        --tw-ring-color: rgba(22, 163, 74, 0.2);
+    }
+
+    .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        z-index: 0;
+        opacity: 0.4;
+    }
+
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+</style>
+@endpush
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 md:p-8 bg-white dark:bg-gray-800">
-                <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6 text-center">Formulir Pengajuan Dana UMKM</h1>
-                
-                {{-- Tampilkan error validasi jika ada --}}
+<div class="relative min-h-screen">    <!-- Main Content -->
+    <div class="relative pt-24 pb-6 px-4 sm:px-6 lg:px-8">
+        <!-- Back to Home Button - Fixed Position -->
+        <div class="fixed top-24 left-4 z-10">
+            <a href="{{ url('dashboard') }}" 
+                class="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200 shadow-sm
+                hover:bg-white transition-all duration-300 group">
+                <svg class="w-5 h-5 mr-2 text-green-600 group-hover:-translate-x-1 transition-transform" 
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span class="text-gray-700">Kembali ke Beranda</span>
+            </a>
+        </div>
+        
+        <div class="max-w-4xl mx-auto">
+            
+            <!-- Form Card -->
+            <div class="glass-effect rounded-3xl shadow-xl overflow-hidden">
+                <div class="p-6 sm:p-10">                <div class="text-center mb-12">
+                    <h1 class="text-4xl sm:text-5xl font-bold mb-4">
+                        Formulir <span class="gradient-text">Pengajuan</span>
+                    </h1>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Lengkapi data diri Anda dengan teliti. Pastikan semua informasi yang dimasukkan sesuai dengan dokumen resmi.
+                    </p>
+                </div>
+                  {{-- Tampilkan error validasi jika ada --}}
                 @if ($errors->any())
-                    <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                        <strong class="font-bold">Oops! Ada kesalahan:</strong>
-                        <ul class="mt-1 list-disc list-inside">
+                    <div class="mb-6 bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl" role="alert">
+                        <p class="font-semibold text-base">Oops! Terjadi Kesalahan</p>
+                        <ul class="mt-2 list-disc list-inside text-sm space-y-1">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
@@ -27,109 +100,189 @@
                 @endif
 
                 <form id="PengajuanForm" action="{{ route('pinjaman.storeDiri') }}" method="post" enctype="multipart/form-data" class="space-y-6">
-                    @csrf {{-- CSRF Token Laravel --}}
-
-                    {{-- NID --}}
+                    @csrf {{-- CSRF Token Laravel --}}                    {{-- NID --}}
                     <div>
-                        <label for="nid" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nomor Identitas (NID/NIK)</label>
-                        <input type="text" id="nid" name="nid" value="{{ old('nid') }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                    </div>
-
-                    {{-- Nama Lengkap --}}
+                        <label for="nid" class="block text-sm font-medium text-gray-700">Nomor Identitas (NID/NIK)</label>
+                        <input type="text" id="nid" name="nid" value="{{ old('nid') }}" required 
+                            class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                            focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                            placeholder:text-gray-400">
+                    </div>                    {{-- Nama Lengkap --}}
                     <div>
-                        <label for="nama" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nama Lengkap</label>
-                        <input type="text" id="nama" name="nama" value="{{ old('nama') }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                        <label for="nama" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                        <input type="text" id="nama" name="nama" value="{{ old('nama') }}" required 
+                            class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                            focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                            placeholder:text-gray-400">
                     </div>
 
                     {{-- Jenis Kelamin --}}
                     <div>
-                        <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Jenis Kelamin</label>
-                        <div class="mt-2 space-x-4">
+                        <label class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                        <div class="mt-2 flex items-center space-x-6">
                             <label class="inline-flex items-center">
-                                <input type="radio" name="jenis_kelamin" value="laki-laki" {{ old('jenis_kelamin') == 'laki-laki' ? 'checked' : '' }} required class="text-indigo-600 border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:border-gray-700 dark:bg-gray-900 dark:focus:ring-offset-gray-800">
-                                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Laki-laki</span>
+                                <input type="radio" name="jenis_kelamin" value="laki-laki" {{ old('jenis_kelamin') == 'laki-laki' ? 'checked' : '' }} required 
+                                    class="w-4 h-4 border border-gray-200 text-green-600 focus:ring-2 focus:ring-green-200 transition-all">
+                                <span class="ms-2 text-sm text-gray-600">Laki-laki</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="jenis_kelamin" value="perempuan" {{ old('jenis_kelamin') == 'perempuan' ? 'checked' : '' }} required class="text-indigo-600 border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:border-gray-700 dark:bg-gray-900 dark:focus:ring-offset-gray-800">
-                                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Perempuan</span>
+                                <input type="radio" name="jenis_kelamin" value="perempuan" {{ old('jenis_kelamin') == 'perempuan' ? 'checked' : '' }} required 
+                                    class="w-4 h-4 border border-gray-200 text-green-600 focus:ring-2 focus:ring-green-200 transition-all">
+                                <span class="ms-2 text-sm text-gray-600">Perempuan</span>
                             </label>
                         </div>
                     </div>
-                    
-                    {{-- Tempat Lahir --}}
-                    <div>
-                        <label for="tempat_lahir" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Tempat Lahir</label>
-                        <input type="text" id="tempat_lahir" name="tempat_lahir" value="{{ old('tempat_lahir') }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                      {{-- Tempat & Tanggal Lahir (digabung dalam satu baris) --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="tempat_lahir" class="block text-sm font-medium text-gray-700">Tempat Lahir</label>
+                            <input type="text" id="tempat_lahir" name="tempat_lahir" value="{{ old('tempat_lahir') }}" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                placeholder:text-gray-400">
+                        </div>
+                        <div>
+                            <label for="tanggal_lahir" class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
+                            <input type="date" id="tanggal_lahir" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all">
+                        </div>
+                    </div>                    {{-- Alamat & Dusun --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat Domisili</label>
+                            <textarea id="alamat" name="alamat" rows="3" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                placeholder:text-gray-400">{{ old('alamat') }}</textarea>
+                        </div>
+                        <div>
+                            <label for="dusun" class="block text-sm font-medium text-gray-700">Dusun</label>
+                            <select id="dusun" name="dusun" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all">
+                                <option value="">- Pilih Dusun -</option>
+                                <option value="BEJEN" {{ old('dusun') == 'BEJEN' ? 'selected' : '' }}>BEJEN</option>
+                                <option value="BAREPAN" {{ old('dusun') == 'BAREPAN' ? 'selected' : '' }}>BAREPAN</option>
+                                <option value="NGENTAK" @if(old('dusun') == 'NGENTAK') selected @endif>NGENTAK</option>
+                                <option value="BROJONALAN" @if(old('dusun') == 'BROJONALAN') selected @endif>BROJONALAN</option>
+                                <option value="GEDONGAN" @if(old('dusun') == 'GEDONGAN') selected @endif>GEDONGAN</option>
+                                <option value="SOROPADAN" @if(old('dusun') == 'SOROPADAN') selected @endif>SOROPADAN</option>
+                                <option value="TINGAL" @if(old('dusun') == 'TINGAL') selected @endif>TINGAL</option>
+                                <option value="JOWAHAN" @if(old('dusun') == 'JOWAHAN') selected @endif>JOWAHAN</option>
+                                {{-- ... opsi dusun lainnya ... --}}
+                            </select>
+                        </div>
+                    </div>                    {{-- Email & Telepon --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email Pemohon</label>
+                            <input type="email" id="email" name="email" value="{{ old('email', Auth::user()->email) }}" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                placeholder:text-gray-400">
+                        </div>
+                        <div>
+                            <label for="telepon" class="block text-sm font-medium text-gray-700">Nomor Telepon/WA Aktif</label>
+                            <input type="tel" id="telepon" name="telepon" value="{{ old('telepon') }}" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                placeholder:text-gray-400" placeholder="Contoh: 08123456789">
+                        </div>
                     </div>
-                    
-                    {{-- Tanggal Lahir --}}
-                    <div>
-                        <label for="tanggal_lahir" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Tanggal Lahir</label>
-                        <input type="date" id="tanggal_lahir" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                    </div>
-
-                    {{-- Alamat Domisili --}}
-                    <div>
-                        <label for="alamat" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Alamat Domisili</label>
-                        <textarea id="alamat" name="alamat" rows="3" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">{{ old('alamat') }}</textarea>
-                    </div>
-
-                    {{-- Dusun --}}
-                    <div>
-                        <label for="dusun" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Dusun</label>
-                        <select id="dusun" name="dusun" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                            <option value="">- Pilih Dusun -</option>
-                            <option value="BEJEN" {{ old('dusun') == 'BEJEN' ? 'selected' : '' }}>BEJEN</option>
-                            <option value="BAREPAN" {{ old('dusun') == 'BAREPAN' ? 'selected' : '' }}>BAREPAN</option>
-                            <option value="NGENTAK" {{ old('dusun') == 'NGENTAK' ? 'selected' : '' }}>NGENTAK</option>
-                            <option value="BROJONALAN" {{ old('dusun') == 'BROJONALAN' ? 'selected' : '' }}>BROJONALAN</option>
-                            <option value="GEDONGAN" {{ old('dusun') == 'GEDONGAN' ? 'selected' : '' }}>GEDONGAN</option>
-                            <option value="SOROPADAN" {{ old('dusun') == 'SOROPADAN' ? 'selected' : '' }}>SOROPADAN</option>
-                            <option value="TINGAL" {{ old('dusun') == 'TINGAL' ? 'selected' : '' }}>TINGAL</option>
-                            <option value="JOWAHAN" {{ old('dusun') == 'JOWAHAN' ? 'selected' : '' }}>JOWAHAN</option>
-                        </select>
-                    </div>
-                    
-                    {{-- Email Pemohon --}}
-                     <div>
-                        <label for="email" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Email Pemohon</label>
-                        <input type="email" id="email" name="email" value="{{ old('email', Auth::user()->email) }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                    </div>
-                    
-                    {{-- Nomor Telepon --}}
-                    <div>
-                        <label for="telepon" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nomor Telepon</label>
-                        <input type="tel" id="telepon" name="telepon" value="{{ old('telepon') }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                    </div>
-
-                    {{-- KTP Pemohon --}}
-                    <div>
-                        <label for="ktp" class="block font-medium text-sm text-gray-700 dark:text-gray-300">KTP Pemohon (PDF)</label>
-                        <input type="file" id="ktp" name="ktp" accept=".pdf" required class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                    </div>
-
-                    {{-- Kartu Keluarga Pemohon --}}
-                    <div>
-                        <label for="kk" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Kartu Keluarga Pemohon (PDF)</label>
-                        <input type="file" id="kk" name="kk" accept=".pdf" required class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                    </div>
-
-                    {{-- Tambahkan input untuk field lain dari model Pengajuan jika diperlukan di tahap ini --}}
-                    {{-- Misal: Nominal, Tujuan Pendanaan, dll. --}}
-                     <div>
-                        <label for="nominal" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nominal Pinjaman (Rp)</label>
-                        <input type="number" id="nominal" name="nominal" value="{{ old('nominal') }}" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" placeholder="Contoh: 5000000">
-                    </div>
-
-                    <div>
-                        <label for="tujuan_pendanaan" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Tujuan Pendanaan</label>
-                        <textarea id="tujuan_pendanaan" name="tujuan_pendanaan" rows="3" required class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">{{ old('tujuan_pendanaan') }}</textarea>
+                      <hr class="border-gray-200 my-8">
+                      {{-- Detail Pinjaman --}}
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold mb-2">Detail <span class="gradient-text">Usaha & Pinjaman</span></h2>
+                        <p class="text-gray-600">Lengkapi informasi usaha dan pengajuan pinjaman Anda</p>
                     </div>
 
+                    {{-- Nama & Jenis Usaha --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="nama_usaha" class="block text-sm font-medium text-gray-700">Nama Usaha Yang Diajukan</label>
+                            <input type="text" id="nama_usaha" name="nama_usaha" value="{{ old('nama_usaha') }}" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                placeholder:text-gray-400" placeholder="Contoh: Warung Sembako Berkah">
+                        </div>
+                        <div>
+                            <label for="jenis_usaha" class="block text-sm font-medium text-gray-700">Jenis Usaha</label>
+                            <select id="jenis_usaha" name="jenis_usaha" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all">
+                                <option value="">- Pilih Jenis Usaha -</option>
+                                <option value="Perdagangan" {{ old('jenis_usaha') == 'Perdagangan' ? 'selected' : '' }}>Perdagangan</option>
+                                <option value="Jasa" {{ old('jenis_usaha') == 'Jasa' ? 'selected' : '' }}>Jasa</option>
+                                <option value="Manufaktur" {{ old('jenis_usaha') == 'Manufaktur' ? 'selected' : '' }}>Manufaktur</option>
+                                <option value="Pertanian" {{ old('jenis_usaha') == 'Pertanian' ? 'selected' : '' }}>Pertanian</option>
+                                <option value="Peternakan" {{ old('jenis_usaha') == 'Peternakan' ? 'selected' : '' }}>Peternakan</option>
+                                <option value="Kerajinan" {{ old('jenis_usaha') == 'Kerajinan' ? 'selected' : '' }}>Kerajinan</option>
+                                <option value="Kuliner" {{ old('jenis_usaha') == 'Kuliner' ? 'selected' : '' }}>Kuliner</option>
+                                <option value="Lainnya" {{ old('jenis_usaha') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                            </select>
+                        </div>
+                    </div>
 
-                    <div class="mt-6">
-                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500 active:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                            Ajukan Pinjaman
+                    {{-- Nominal & Tujuan --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="nominal" class="block text-sm font-medium text-gray-700">Nominal Pinjaman (Rp)</label>
+                            <input type="number" id="nominal" name="nominal" value="{{ old('nominal') }}" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                placeholder:text-gray-400" placeholder="Contoh: 5000000">
+                            <p class="mt-1 text-sm text-gray-500">Maksimal pinjaman Rp. 10.000.000</p>
+                        </div>
+                        <div>
+                            <label for="tujuan_pendanaan" class="block text-sm font-medium text-gray-700">Tujuan Pendanaan</label>
+                            <select id="tujuan_pendanaan" name="tujuan_pendanaan" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all">
+                                <option value="">- Pilih Tujuan -</option>
+                                <option value="Modal Kerja" {{ old('tujuan_pendanaan') == 'Modal Kerja' ? 'selected' : '' }}>Modal Kerja</option>
+                                <option value="Investasi" {{ old('tujuan_pendanaan') == 'Investasi' ? 'selected' : '' }}>Investasi</option>
+                                <option value="Pengembangan Usaha" {{ old('tujuan_pendanaan') == 'Pengembangan Usaha' ? 'selected' : '' }}>Pengembangan Usaha</option>
+                                <option value="Pembelian Peralatan" {{ old('tujuan_pendanaan') == 'Pembelian Peralatan' ? 'selected' : '' }}>Pembelian Peralatan</option>
+                            </select>
+                        </div>
+                    </div><hr class="border-gray-200 my-8">
+
+                    {{-- Upload Dokumen --}}
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold mb-2">Upload <span class="gradient-text">Dokumen</span></h2>
+                        <p class="text-gray-600">Lampirkan dokumen pendukung dalam format PDF, JPG, atau PNG</p>
+                    </div><div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="ktp" class="block text-sm font-medium text-gray-700">Scan KTP Pemohon (PDF/JPG/PNG)</label>
+                            <input type="file" id="ktp" name="ktp" accept=".pdf,.jpg,.jpeg,.png" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 
+                                file:text-sm file:font-medium file:bg-green-50 file:text-green-700 
+                                hover:file:bg-green-100 cursor-pointer">
+                        </div>
+                        <div>
+                            <label for="kk" class="block text-sm font-medium text-gray-700">Scan Kartu Keluarga (PDF/JPG/PNG)</label>
+                            <input type="file" id="kk" name="kk" accept=".pdf,.jpg,.jpeg,.png" required 
+                                class="mt-1 block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm
+                                focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all
+                                file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 
+                                file:text-sm file:font-medium file:bg-green-50 file:text-green-700 
+                                hover:file:bg-green-100 cursor-pointer">
+                        </div>
+                    </div>
+                      {{-- Tombol Submit --}}
+                    <div class="flex items-center justify-center mt-12">
+                        <button type="submit" 
+                            class="w-full sm:w-auto px-8 py-4 text-lg font-semibold text-white 
+                            bg-gradient-to-r from-green-600 to-green-500 
+                            hover:from-green-700 hover:to-green-600
+                            rounded-xl shadow-lg shadow-green-500/30
+                            transform transition-all duration-300
+                            hover:shadow-xl hover:shadow-green-500/40 hover:scale-[1.02]
+                            focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                            Kirim Pengajuan
                         </button>
                     </div>
                 </form>
@@ -137,5 +290,8 @@
         </div>
     </div>
 </div>
-
 @endsection
+
+@push('scripts')
+{{-- Jika ada JS kustom untuk halaman ini --}}
+@endpush
