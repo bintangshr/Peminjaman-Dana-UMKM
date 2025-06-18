@@ -79,16 +79,16 @@
 
 <body class="bg-gray-50">
     <!-- Header -->
-    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-effect bg-white/90 border-b border-gray-200/50">
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-effect bg-white/90 border-b border-gray-200/50 shadow-sm">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 lg:h-20">
+            <div class="flex items-center justify-between h-20 lg:h-24">
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <a href="{{ url('/') }}" class="flex items-center space-x-3 group">
-                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center text-white text-xl lg:text-2xl group-hover:scale-110 transition-transform duration-300">
+                        <div class="w-30 h-30 lg:w-12 lg:h-12 from-primary to-accent rounded-xl flex items-center justify-center text-white text-4xl lg:text-5xl group-hover:scale-110 transition-transform duration-300">
                             🌾
                         </div>
-                        <h1 class="text-xl lg:text-2xl font-bold gradient-text">DANA UMKM DESA</h1>
+                        <h1 class="text-xl lg:text-3xl font-bold gradient-text">DANA UMKM DESA</h1>
                     </a>
                 </div>
 
@@ -104,46 +104,50 @@
                 <!-- Desktop Navigation -->
                 <nav class="hidden lg:flex items-center space-x-8">
                     <ul class="flex items-center space-x-8">
-                        <li><a href="#beranda" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group">
+                        <li><a href="#beranda" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group text-base lg:text-2xl">
                             Beranda
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
                         </a></li>
-                        <li><a href="#program" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group">
+                        <li><a href="#program" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group text-base lg:text-2xl">
                             Program
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
                         </a></li>
-                        <li><a href="#proses" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group">
+                        <li><a href="#proses" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group text-base lg:text-2xl">
                             Proses
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
                         </a></li>
-                        <li><a href="#testimoni" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group">
+                        <li><a href="#testimoni" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group text-base lg:text-2xl">
                             Testimoni
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
                         </a></li>
-                        <li><a href="#kontak" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group">
+                        <!-- <li><a href="#kontak" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300 relative group text-base lg:text-2xl">
                             Kontak
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
-                        </a></li>
+                        </a></li> -->
                     </ul>
                     
                     <!-- Auth Buttons -->
                     <div class="flex items-center space-x-4">
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="px-4 py-2 text-primary hover:text-secondary font-medium transition-colors duration-300">Dashboard</a>
-                            <form method="POST" action="{{ route('logout') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="px-4 py-2 text-primary hover:text-secondary font-medium transition-colors duration-300">
-                                    Keluar
-                                </button>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}" class="px-6 py-2.5 bg-primary hover:bg-secondary text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105">
-                                Masuk
-                            </a>
-                            <a href="{{ route('login') }}" class="px-6 py-2.5 bg-gradient-to-r from-primary to-accent hover:from-secondary hover:to-primary text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105">
-                                Ajukan
-                            </a>
-                        @endauth
+
+                        @if (Route::has('login'))
+                            @auth
+                                <a href="{{ url('/dashboard') }}" class="px-4 py-2 text-primary hover:text-secondary font-medium transition-colors duration-300">Dashboard</a>
+                                <form method="POST" action="{{ route('logout') }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="px-4 py-2 text-primary hover:text-secondary font-medium transition-colors duration-300">
+                                        Keluar
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="px-6 py-3 text-base lg:text-2xl bg-primary hover:bg-secondary text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105">
+                                    Masuk
+                                </a>
+                                <!-- <a href="{{ route('login') }}" class="px-6 py-2.5 bg-gradient-to-r from-primary to-accent hover:from-secondary hover:to-primary text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105">
+                                    Ajukan
+                                </a> -->
+                            @endauth
+                        @endif
+
                     </div>
                 </nav>
             </div>
@@ -174,14 +178,32 @@
                 </div>
             </nav>
         </div>
+        <script>
+            window.addEventListener("scroll", function () {
+                const header = document.getElementById("header");
+                if (window.scrollY > 10) {
+                    header.classList.add("shadow-md");
+                } else {
+                    header.classList.remove("shadow-md");
+                }
+            });
+        </script>
     </header>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center hero-pattern" id="beranda" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('/images/hero1.jpg') no-repeat center center; background-size: cover;">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section class="relative min-h-screen flex items-center justify-center" id="beranda">
+
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+            <source src="{{ asset('videos/hero.mp4') }}" type="video/mp4">
+            Browser kamu tidak mendukung video.
+        </video>
+
+        <div class="absolute inset-0 bg-black/60 z-10"></div>
+
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-20">
             <div class="max-w-4xl mx-auto">
-                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 animate-fade-in-down">
-                    Dukung <span class="text-accent">UMKM Desa</span>, 
+                <h2 class="text-6xl sm:text-6xl lg:text-6xl font-bold text-white mb-6 animate-fade-in-down leading-loose">
+                    Dukung <span class="text-accent">UMKM Desa</span> 
                     <br class="hidden sm:block">Bangkitkan Ekonomi Lokal
                 </h2>
                 <p class="text-lg sm:text-xl text-gray-200 mb-8 max-w-3xl mx-auto animate-fade-in-up">
@@ -197,23 +219,25 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Scroll Indicator -->
-        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
             <div id="scroll-down" class="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center animate-bounce-slow cursor-pointer">
                 <div class="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse-slow"></div>
             </div>
         </div>
     </section>
 
+
     <!-- Features Section -->
-    <section class="py-20 bg-gradient-to-br from-gray-50 to-white" id="program">
+     <!-- bg-gradient-to-br from-primary/5 to-accent/5 -->
+    <section class="py-36 bg-gradient-to-br from-gray-50 to-accent/5" id="program">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                    Program <span class="gradient-text">Pinjaman Kami</span>
+                <h2 class="text-4xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                    Program <span class="gradient-text">Pendanaan Kami</span>
                 </h2>
-                <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+                <p class="text-lg sm:text-2xl text-gray-600 max-w-3xl mx-auto">
                     Kami menawarkan berbagai program pembiayaan yang dirancang khusus untuk kebutuhan UMKM di desa dengan suku bunga rendah dan proses yang mudah.
                 </p>
             </div>
@@ -225,7 +249,7 @@
                         💰
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-4">Pinjaman Modal Usaha</h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
+                    <p class="text-xl text-gray-600 leading-relaxed mb-6">
                         Pinjaman untuk modal kerja, pengembangan usaha, atau memulai usaha baru dengan suku bunga rendah mulai dari 3% per tahun dan tenor hingga 36 bulan.
                     </p>
                     <div class="flex items-center text-primary font-semibold group-hover:text-secondary transition-colors duration-300">
@@ -242,7 +266,7 @@
                         🛠️
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-4">Pembiayaan Alat Produksi</h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
+                    <p class="text-xl text-gray-600 leading-relaxed mb-6">
                         Dana khusus untuk pembelian peralatan, mesin, atau teknologi yang dibutuhkan untuk meningkatkan kapasitas dan kualitas produksi usaha Anda.
                     </p>
                     <div class="flex items-center text-primary font-semibold group-hover:text-secondary transition-colors duration-300">
@@ -259,7 +283,7 @@
                         🌱
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-4">Dana Pertanian & Peternakan</h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
+                    <p class="text-xl text-gray-600 leading-relaxed mb-6">
                         Program pembiayaan khusus untuk petani, peternak, dan usaha pengolahan hasil pertanian dengan jadwal pembayaran yang disesuaikan dengan masa panen.
                     </p>
                     <div class="flex items-center text-primary font-semibold group-hover:text-secondary transition-colors duration-300">
@@ -273,14 +297,98 @@
         </div>
     </section>
 
+<!-- Statistics Section -->
+    <section class="py-36 bg-white">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-12">
+      
+      <!-- Kiri: Judul dan deskripsi -->
+      <div>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+           <span class="gradient-text">Puluhan </span>Pelaku Usaha Telah Terbantu
+        </h2>
+        <p class="text-xl sm:text-xl text-gray-600 max-w-xl">
+          Berikut adalah data pengajuan yang telah disetujui dan membantu pelaku usaha di berbagai dusun di Desa Wanurejo untuk berkembang.
+        </p>
+      </div>
+      
+      <!-- Kanan: Grafik -->
+      <div>
+        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+          <canvas id="statistikChart" class="w-[400px] h-[400px] mx-auto"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+    <script>
+    // Fungsi untuk generate warna random pastel
+    function generateColors(count) {
+        const colors = [];
+        for (let i = 0; i < count; i++) {
+            const hue = Math.floor(Math.random() * 360); // hue random
+            colors.push(`hsl(${hue}, 70%, 65%)`); // warna pastel
+        }
+        return colors;
+    }
+
+    fetch('/statistik-dusun')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('statistikChart').getContext('2d');
+            const backgroundColors = generateColors(data.labels.length);
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Jumlah Pengajuan Disetujui',
+                        data: data.data,
+                        backgroundColor: backgroundColors,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#333',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Statistik Pengajuan per Dusun',
+                            color: '#333',
+                            font: {
+                                size: 18
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error loading statistics:', error));
+</script>
+
+
     <!-- Process Section -->
-    <section class="py-20 bg-gradient-to-br from-primary/5 to-accent/5" id="proses">
+    <section class="py-36 bg-gradient-to-br from-primary/5 to-accent/5" id="proses">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
                     Proses <span class="gradient-text">Pengajuan</span>
                 </h2>
-                <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+                <p class="text-xl sm:text-xl text-gray-600 max-w-3xl mx-auto">
                     Proses pengajuan pinjaman yang mudah, cepat, dan transparan dalam 4 langkah sederhana.
                 </p>
             </div>
@@ -294,8 +402,8 @@
                         </div>
                         <div class="hidden lg:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-primary/50 to-transparent"></div>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Daftar Online</h3>
-                    <p class="text-gray-600">Isi formulir pendaftaran online dengan data lengkap dan dokumen yang diperlukan.</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Daftar Online</h3>
+                    <p class="text-lg text-gray-600">Isi formulir pendaftaran online dengan data lengkap dan dokumen yang diperlukan.</p>
                 </div>
 
                 <!-- Step 2 -->
@@ -306,8 +414,8 @@
                         </div>
                         <div class="hidden lg:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-primary/50 to-transparent"></div>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Verifikasi Data</h3>
-                    <p class="text-gray-600">Tim kami akan memverifikasi data dan dokumen yang Anda submit dalam 1-2 hari kerja.</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Verifikasi Data</h3>
+                    <p class="text-lg text-gray-600">Tim kami akan memverifikasi data dan dokumen yang Anda submit dalam 1-2 hari kerja.</p>
                 </div>
 
                 <!-- Step 3 -->
@@ -318,8 +426,8 @@
                         </div>
                         <div class="hidden lg:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-primary/50 to-transparent"></div>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Survei Lapangan</h3>
-                    <p class="text-gray-600">Petugas akan melakukan survei ke lokasi usaha untuk penilaian kelayakan.</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Survei Lapangan</h3>
+                    <p class="text-lg text-gray-600">Petugas akan melakukan survei ke lokasi usaha untuk penilaian kelayakan.</p>
                 </div>
 
                 <!-- Step 4 -->
@@ -327,40 +435,18 @@
                     <div class="w-20 h-20 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                         4
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Pencairan Dana</h3>
-                    <p class="text-gray-600">Setelah disetujui, dana akan dicairkan langsung ke rekening Anda.</p>
+
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Pencairan Dana</h3>
+                    <p class="text-lg text-gray-600">Setelah disetujui, dana akan dicairkan langsung ke rekening Anda.</p>
+
                 </div>
             </div>
         </div>
     </section>
 
-   
+    <!-- Testimonials Section -->
+    <section class="py-36 bg-gradient-to-br from-gray-50 to-white" id="testimoni">
 
-    <!-- Statistics Section -->
-    <section class="py-20 bg-white">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                    Statistik <span class="gradient-text">Pengajuan</span>
-                </h2>
-                <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-                    Penyebaran pengajuan yang telah disetujui berdasarkan dusun.
-                </p>
-            </div>
-            
-            <div class="max-w-5xl mx-auto">
-                <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
-                    <div class="text-gray-700 font-medium mb-4">Statistik Pengajuan per Dusun</div>
-                    <div class="relative" style="height: 400px; width: 100%;">
-                        <canvas id="statistikChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimoni Section -->
-    <section class="py-20 bg-white">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
@@ -409,13 +495,24 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-20 bg-green-500">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Siap Mengembangkan Usaha Anda?</h2>
-            <p class="text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto">Bergabunglah dengan ribuan UMKM yang telah merasakan manfaat program pembiayaan kami.</p>
-            <a href="{{ route('login') }}" class="inline-block px-8 py-4 bg-white text-green-600 font-semibold rounded-xl shadow-lg hover:bg-gray-100 transition-all duration-300 text-lg">Mulai Sekarang</a>
-        </div>
-    </section>
+
+    <section class="py-36 bg-[url('/images/hero1.jpg')] bg-fixed bg-center bg-cover bg-no-repeat">
+  <!-- <div class="bg-black/50"> overlay gelap biar teks tetap terbaca -->
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+        Siap Mengembangkan Usaha Anda?
+      </h2>
+      <p class="text-lg sm:text-xl text-gray-100 mb-8 max-w-2xl mx-auto">
+        Bergabunglah dengan puluhan UMKM yang telah merasakan manfaat program pembiayaan kami.
+      </p>
+      <a href="{{ route('login') }}"
+        class="inline-block px-8 py-4 bg-white text-primary hover:text-secondary font-semibold rounded-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 transform">
+        Mulai Sekarang
+      </a>
+    </div>
+  </div>
+</section>
+
 
     <!-- Chart Data -->
     <script>
