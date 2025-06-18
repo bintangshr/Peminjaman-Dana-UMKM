@@ -10,10 +10,6 @@ class Pengajuan extends Model
     use HasFactory;
 
     protected $table = 'pengajuan';
-    // Jika NID adalah primary key Anda, uncomment dan sesuaikan:
-    // protected $primaryKey = 'nid';
-    // public $incrementing = false;
-    // protected $keyType = 'string';
 
     public $timestamps = true;
 
@@ -27,8 +23,8 @@ class Pengajuan extends Model
         'alamat',
         'dusun',
         'email',
-        'ktp_path',     // <--- PASTIKAN INI BENAR (BUKAN 'ktp')
-        'kk_path',      // <--- PASTIKAN INI BENAR (BUKAN 'kk')
+        'ktp_path',
+        'kk_path',
         'nominal',
         'norek',
         'pemilik_rekening',
@@ -36,14 +32,14 @@ class Pengajuan extends Model
         'nama_usaha',
         'jenis_usaha',
         'tujuan_pendanaan',
-        'proposal_path',// <--- PASTIKAN INI BENAR (BUKAN 'proposal')
+        'proposal_path',
         'setuju',
         'status',
         'tgl_pengajuan',
         'tgl_pencairan',
         'tgl_pengembalian',
         'tenor',
-        // 'user_id',
+        'user_id',
     ];
 
     protected $casts = [
@@ -51,7 +47,13 @@ class Pengajuan extends Model
         'tgl_pengajuan' => 'date',
         'tgl_pencairan' => 'date',
         'tgl_pengembalian' => 'date',
-        'setuju' => 'boolean',
-        'nominal' => 'decimal:2',
     ];
+
+    /**
+     * Get the user that owns the application.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

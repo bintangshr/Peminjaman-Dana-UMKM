@@ -17,7 +17,7 @@ class DashboardController extends Controller
         $pendingApplicationsCount = Pengajuan::whereIn('status', ['pending_review', 'pending_detail_usaha'])
                                         ->count(); // ->count() dipanggil setelah whereIn selesai
 
-        $approvedApplicationsCount = Pengajuan::where('status', 'approved')->count();
+        dd(Pengajuan::where('status', 'approved')->count());
         
         $totalUsersCount = User::where('role', 'user')->count(); // Hanya hitung user biasa
         return view('admin.dashboard', compact(

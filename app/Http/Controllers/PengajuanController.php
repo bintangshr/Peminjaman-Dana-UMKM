@@ -8,50 +8,69 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse; // <-- DITAMBAHKAN
-use Illuminate\Support\Facades\DB;   // <-- DITAMBAHKAN
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class PengajuanController extends Controller
 {
     /**
-     * Menampilkan halaman status pengajuan untuk pengguna atau semua pengajuan untuk admin jika diakses dari /status.
+     * Menampilkan halaman status pengajuan untuk pengguna atau semua pengajuan untuk admin.
      */
     public function showStatus(): View
     {
         $user = Auth::user();
         if ($user->role == 'admin') {
-            // Admin bisa melihat semua jika mengakses /status.
-            // Atau, jika Anda ingin halaman /status hanya untuk user, redirect admin ke admin.pengajuan.index
-            // return redirect()->route('admin.pengajuan.index');
-            $pengajuanItems = Pengajuan::orderBy('tgl_pengajuan', 'desc')->orderBy('created_at', 'desc')->paginate(10); // Contoh paginasi
+            $pengajuanItems = Pengajuan::orderBy('tgl_pengajuan', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
         } else {
-            // User biasa hanya melihat pengajuannya berdasarkan email
-            $pengajuanItems = Pengajuan::where('email', $user->email)
-                                        ->orderBy('tgl_pengajuan', 'desc')
-                                        ->orderBy('created_at', 'desc')
-                                        ->paginate(10); // Contoh paginasi
+            $pengajuanItems = Pengajuan::where('user_id', $user->id)
+                ->orderBy('tgl_pengajuan', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
         }
         return view('pinjaman.status', compact('pengajuanItems'));
     }
 
     /**
-     * Menampilkan daftar semua pengajuan untuk Admin dengan paginasi.
+     * Menampilkan daftar semua pengajuan untuk Admin dengan paginasi dan filter.
      */
-    public function indexAdmin(Request $request): View // Tambahkan Request untuk filter
+    public function indexAdmin(Request $request): View
     {
-        $query = Pengajuan::orderBy('tgl_pengajuan', 'desc')->orderBy('created_at', 'desc');
+        $query = Pengajuan::with('user');
 
-        // Contoh implementasi filter status sederhana
-        if ($request->has('status_filter') && $request->status_filter != '') {
-            if ($request->status_filter == 'pending') { // Jika filter 'pending' mencakup beberapa status
-                 $query->whereIn('status', ['pending_review', 'pending_detail_usaha']);
+        if ($request->filled('status')) {
+            $status = $request->status;
+            if ($status === 'pending') {
+                $query->whereIn('status', ['pending_review', 'pending_detail_usaha']);
             } else {
-                $query->where('status', $request->status_filter);
+                $query->where('status', $status);
             }
         }
 
-        $pengajuanItems = $query->paginate(10); // Ganti get() dengan paginate(), misal 10 item per halaman
-        return view('admin.pengajuan.index', compact('pengajuanItems'));
+        if ($request->filled('date_filter')) {
+            $dateFilter = $request->date_filter;
+            switch ($dateFilter) {
+                case 'today':
+                    $query->whereDate('created_at', today());
+                    break;
+                case 'week':
+                    $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+                    break;
+                case 'month':
+                    $query->whereMonth('created_at', now()->month)
+                          ->whereYear('created_at', now()->year);
+                    break;
+                case 'year':
+                    $query->whereYear('created_at', now()->year);
+                    break;
+            }
+        }
+
+        $query->orderBy('created_at', 'desc');
+        $pengajuans = $query->paginate(10)->withQueryString();
+
+        return view('admin.pengajuan.index', compact('pengajuans'));
     }
 
     /**
@@ -97,7 +116,7 @@ class PengajuanController extends Controller
             'tujuan_pendanaan' => $validatedData['tujuan_pendanaan'],
             'tgl_pengajuan' => now(),
             'status' => 'pending_detail_usaha',
-            // 'user_id' => Auth::id(),
+            'user_id' => Auth::id(),
         ];
 
         if ($request->hasFile('ktp')) {
@@ -118,14 +137,7 @@ class PengajuanController extends Controller
      */
     public function createDetails($pengajuan_nid): View
     {
-        try {
-            $pengajuan = Pengajuan::where('nid', $pengajuan_nid)->firstOrFail();
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            abort(404, 'Data pengajuan tidak ditemukan.');
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error("Error di createDetails saat mengambil NID $pengajuan_nid: " . $e->getMessage() . "\n" . $e->getTraceAsString());
-            abort(500, 'Terjadi kesalahan pada server.');
-        }
+        $pengajuan = Pengajuan::where('nid', $pengajuan_nid)->firstOrFail();
         return view('pinjaman.create_details', compact('pengajuan'));
     }
 
@@ -213,21 +225,20 @@ class PengajuanController extends Controller
      */
     public function destroyPengajuan(Pengajuan $pengajuan)
     {
-        if ($pengajuan->ktp_path && Storage::disk('public')->exists($pengajuan->ktp_path)) {
-            Storage::disk('public')->delete($pengajuan->ktp_path);
-        }
-        if ($pengajuan->kk_path && Storage::disk('public')->exists($pengajuan->kk_path)) {
-            Storage::disk('public')->delete($pengajuan->kk_path);
-        }
-        if ($pengajuan->proposal_path && Storage::disk('public')->exists($pengajuan->proposal_path)) {
-            Storage::disk('public')->delete($pengajuan->proposal_path);
-        }
+        if ($pengajuan->ktp_path) Storage::disk('public')->delete($pengajuan->ktp_path);
+        if ($pengajuan->kk_path) Storage::disk('public')->delete($pengajuan->kk_path);
+        if ($pengajuan->proposal_path) Storage::disk('public')->delete($pengajuan->proposal_path);
+        
         $pengajuan->delete();
         return redirect()->route('admin.pengajuan.index')->with('success', 'Data pengajuan berhasil dihapus.');
     }
 
+    // ===================================================================================
+    // [PERBAIKAN] MENAMBAHKAN KEMBALI METODE-METODE STATISTIK YANG HILANG
+    // ===================================================================================
+
     /**
-     * Menyediakan data untuk chart berdasarkan dusun. (METODE BARU)
+     * Menyediakan data untuk chart berdasarkan dusun.
      */
     public function getApprovedByDusunData(): JsonResponse
     {
@@ -237,7 +248,6 @@ class PengajuanController extends Controller
             ->orderBy('dusun')
             ->get();
 
-        // Mengambil label (dusun) dan data (total) dari hasil query
         $labels = $data->pluck('dusun');
         $data = $data->pluck('total');
 
@@ -252,18 +262,74 @@ class PengajuanController extends Controller
      */
     public function getStatistikPerDusun(): JsonResponse
     {
-        $statistik = Pengajuan::select('dusun', DB::raw('count(*) as total'))
-            ->whereIn('status', ['approved', 'completed'])
+        $data = Pengajuan::select('dusun', DB::raw('count(*) as total'))
             ->groupBy('dusun')
             ->orderBy('dusun')
             ->get();
 
-        $labels = $statistik->pluck('dusun')->toArray();
-        $data = $statistik->pluck('total')->toArray();
-
         return response()->json([
-            'labels' => $labels,
-            'data' => $data
+            'labels' => $data->pluck('dusun')->map(fn($dusun) => 'Dusun ' . $dusun),
+            'data' => $data->pluck('total'),
         ]);
+    }
+
+    /**
+     * Get public statistics for the welcome page.
+     * INI ADALAH METODE YANG MENYEBABKAN ERROR KARENA TIDAK DITEMUKAN.
+     */
+    public function getPublicStatistics(): array
+    {
+        $totalPengajuan = Pengajuan::count();
+        $approvedPengajuan = Pengajuan::where('status', 'approved')->count();
+        
+        $dusunList = ['BEJEN', 'BAREPAN', 'NGENTAK', 'BROJONALAN', 'GEDONGAN', 'SOROPADAN', 'TINGAL', 'JOWAHAN'];
+        
+        $approvedByDusun = Pengajuan::select('dusun', DB::raw('count(*) as total'))
+            ->where('status', 'approved')
+            ->groupBy('dusun')
+            ->pluck('total', 'dusun')
+            ->toArray();
+
+        $pengajuanByDusun = collect($dusunList)->map(function ($dusun) use ($approvedByDusun) {
+            return [
+                'dusun' => $dusun,
+                'total' => $approvedByDusun[$dusun] ?? 0
+            ];
+        });
+
+        $recentPengajuan = Pengajuan::select('nama', 'dusun', 'status', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+        
+        $monthlyLabels = [];
+        $monthlyData = [];
+        $now = now();
+        for ($i = 11; $i >= 0; $i--) {
+            $date = $now->copy()->subMonths($i);
+            $label = $date->format('M Y');
+            $monthlyLabels[] = $label;
+            $monthlyData[] = Pengajuan::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+        }
+
+        $statusCounts = [
+            'approved' => $approvedPengajuan,
+            'pending' => Pengajuan::whereIn('status', ['pending_review', 'pending_detail_usaha'])->count(),
+            'rejected' => Pengajuan::where('status', 'rejected')->count(),
+        ];
+
+        return [
+            'totalPengajuan' => $totalPengajuan,
+            'approvedPengajuan' => $approvedPengajuan,
+            'pengajuanByDusun' => $pengajuanByDusun,
+            'recentPengajuan' => $recentPengajuan,
+            'monthlyLabels' => $monthlyLabels,
+            'monthlyData' => $monthlyData,
+            'statusCounts' => $statusCounts,
+            'pendingPengajuan' => $statusCounts['pending'],
+            'rejectedPengajuan' => $statusCounts['rejected'],
+        ];
     }
 }
