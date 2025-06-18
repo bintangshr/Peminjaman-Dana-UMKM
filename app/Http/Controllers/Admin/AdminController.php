@@ -40,12 +40,14 @@ class AdminController extends Controller
         $statusStats = collect($allStatuses)->mapWithKeys(function ($status) use ($statusCounts) {
             return [$status => $statusCounts[$status] ?? 0];
         });
-
+        $approvedApplicationsCount = $statusStats['approved'] ?? 0;
         $data = [
-            'totalApplications' => Pengajuan::count(),            'pendingReviews' => Pengajuan::where('status', 'Pending_review')->count(),
+            'totalApplications' => Pengajuan::count(),            
+            'pendingReviews' => Pengajuan::where('status', 'Pending_review')->count(),
             'approvedToday' => Pengajuan::where('status', 'approved')
                 ->whereDate('updated_at', Carbon::today())
                 ->count(),
+            'approvedApplicationsCount' => $approvedApplicationsCount,
             'totalUsers' => User::where('role', '!=', 'admin')->count(),
             'recentApplications' => $recentApplications,
             'currentPeriod' => $period,
