@@ -1,248 +1,89 @@
-
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - {{ config('app.name', 'Laravel') }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#16a34a',
+                        accent: '#22c55e',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary: #2E7D32;
-            --primary-light: #4CAF50;
-            --secondary: #8BC34A;
-            --light: #F1F8E9;
-            --dark: #1B5E20;
-            --text-dark: #333333;
-            --text-light: #FFFFFF;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-            --border-radius: 8px;
+        .gradient-text {
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--light), #e8f5e9);
-            color: var(--text-dark);
-            line-height: 1.6;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 400px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h2 {
-            color: var(--primary);
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .logo-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .logo-text {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .input-group {
-            margin-bottom: 1.2rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-
-        input {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
-        }
-
-        .error-message {
-            color: #d32f2f;
-            font-size: 0.85rem;
-            display: block;
-            margin-top: 0.3rem;
-        }
-
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.9rem;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: var(--transition);
-            width: 100%;
-        }
-
-        .btn:hover {
-            background-color: var(--dark);
-            transform: translateY(-2px);
-        }
-
-        p {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #666;
-        }
-
-        a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        a:hover {
-            color: var(--dark);
-            text-decoration: underline;
-        }
-
-        .forgot-password {
-            text-align: right;
-            margin: -0.5rem 0 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .login-divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
-        }
-
-        .login-divider span {
-            flex: 1;
-            height: 1px;
-            background-color: #ddd;
-        }
-
-        .login-divider p {
-            padding: 0 10px;
-            color: #777;
-            font-size: 0.9rem;
-            margin: 0;
-        }
-
-        .home-link {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-weight: 500;
-        }
-
-        .home-link:hover {
-            color: var(--dark);
-        }
-
-        @media (max-width: 480px) {
-            .container { padding: 1.5rem; margin: 0 1rem; }
-            h2 { font-size: 1.5rem; }
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
     </style>
-
-    <a href="/" class="home-link">← Kembali ke Beranda</a>
-
-    <div class="container">
-        <div class="logo">
-            <div class="logo-icon">🌾</div>
-            <div class="logo-text">DANA UMKM DESA</div>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <header class="py-6 bg-white/90 border-b border-gray-200/50 glass-effect">
+        <div class="container mx-auto flex items-center justify-center">
+            <a href="{{ url('/') }}" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center text-white text-xl group-hover:scale-110 transition-transform duration-300">
+                    🌾
+                </div>
+                <h1 class="text-xl font-bold gradient-text">DANA UMKM DESA</h1>
+            </a>
         </div>
-
-     <h2>Login Pengguna</h2>
-
-<!-- GLOBAL ERROR -->
-@if ($errors->any())
-    <div class="error-message" style="text-align: center; margin-bottom: 1rem;">
-        {{ $errors->first() }}
-    </div>
-@endif
-
-<!-- Session Status -->
-@if (session('status'))
-    <div class="error-message" style="color: green; text-align:center; margin-bottom: 10px;">
-        {{ session('status') }}
-    </div>
-@endif
-
-<form method="POST" action="{{ route('login') }}">
-
-    @csrf
-
-    <div class="input-group">
-        <label for="email">Email:</label>
-        <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
-        @error('email')
-            <span class="error-message">{{ $message }}</span>
-        @enderror
-    </div>
-
-    <div class="input-group">
-        <label for="password">Password:</label>
-        <input id="password" type="password" name="password" required>
-        @error('password')
-            <span class="error-message">{{ $message }}</span>
-        @enderror
-    </div>
-
-    <div class="forgot-password">
-        @if (Route::has('password.request'))
-            <a href="{{ route('password.request') }}">Lupa password?</a>
-        @endif
-    </div>
-
-    <button type="submit" class="btn">Login</button>
-</form>
-
-        <div class="login-divider">
-            <span></span>
-            <p>atau</p>
-            <span></span>   
+    </header>
+    <main class="flex flex-col items-center justify-center min-h-[80vh] px-4">
+        <div class="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8 md:p-10 mt-10">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2 text-center">Login ke Akun Anda</h2>
+            <p class="text-gray-500 mb-6 text-center">Selamat datang kembali!</p>
+            @if (session('status'))
+                <div class="mb-4 font-medium text-sm text-green-500 text-center">
+                    {{ session('status') }}
+                </div>
+            @endif
+            <form method="POST" action="{{ route('login') }}" class="space-y-6">
+                @csrf
+                <div>
+                    <label for="email" class="block font-medium text-gray-700 mb-1">Email</label>
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"
+                        class="block w-full bg-gray-50 border border-gray-200 text-gray-700 focus:border-primary focus:ring-primary rounded-lg shadow-sm px-4 py-3">
+                    @error('email')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <label for="password" class="block font-medium text-gray-700 mb-1">Password</label>
+                    <input id="password" type="password" name="password" required autocomplete="current-password"
+                        class="block w-full bg-gray-50 border border-gray-200 text-gray-700 focus:border-primary focus:ring-primary rounded-lg shadow-sm px-4 py-3">
+                    @error('password')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="flex items-center justify-between">
+                    <label for="remember_me" class="inline-flex items-center">
+                        <input id="remember_me" type="checkbox" name="remember" class="rounded bg-gray-50 border-gray-300 text-primary shadow-sm focus:ring-primary">
+                        <span class="ms-2 text-sm text-gray-600">Ingat saya</span>
+                    </label>
+                    <a href="{{ route('password.request') }}" class="text-sm text-primary hover:underline">Lupa password?</a>
+                </div>
+                <button type="submit" class="w-full bg-primary hover:bg-accent text-white font-bold rounded-xl py-3 transition-all duration-300 shadow">
+                    Login
+                </button>
+            </form>
+            <div class="mt-6 text-center text-gray-600">
+                Belum punya akun?
+                <a href="{{ route('register') }}" class="text-primary font-semibold hover:underline">Daftar sekarang</a>
+            </div>
         </div>
-
-        <p>Belum punya akun? <a href="{{ route('register') }}">Daftar</a></p>
-    </div>
-
+    </main>
+</body>
+</html>
