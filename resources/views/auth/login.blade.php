@@ -1,3 +1,4 @@
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,12 +8,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Tailwind Custom Config -->
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         primary: '#16a34a',
+
                         secondary: '#15803d',
                         accent: '#22c55e',
                     },
@@ -21,11 +24,13 @@
                         'fade-in-down': 'fadeInDown 0.6s ease-out',
                         'bounce-slow': 'bounce 2s infinite',
                         'pulse-slow': 'pulse 3s infinite',
+
                     }
                 }
             }
         }
     </script>
+
 
     <!-- Custom Animation CSS -->
     <style>
