@@ -30,12 +30,44 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <header class="py-6 bg-white/90 border-b border-gray-200/50 glass-effect">
-        <div class="container mx-auto flex items-center justify-center">
-            <a href="{{ url('/') }}" class="flex items-center space-x-3 group">
-                <div class="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center text-white text-xl group-hover:scale-110 transition-transform duration-300">
-                    🌾
+
+<body class="min-h-screen flex items-center justify-center px-4 bg-[url('/images/hero1.jpg')] bg-cover bg-center bg-no-repeat relative">
+    <div class="absolute inset-0 bg-black/40 -z-10"></div>
+    <!-- Decorative Elements -->
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <!-- Top-right blob -->
+        <div class="absolute -top-64 -right-64 w-96 h-96 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 blur-3xl"></div>
+        <!-- Bottom-left blob -->
+        <div class="absolute -bottom-64 -left-64 w-96 h-96 rounded-full bg-gradient-to-tr from-accent/20 to-primary/20 blur-3xl"></div>
+    </div>
+
+    <!-- Decorative Blobs -->
+    <!-- <div class="blob w-96 h-96 bg-green-200/50 -top-48 -left-48"></div>
+    <div class="blob w-96 h-96 bg-emerald-200/50 -bottom-48 -right-48"></div> -->
+
+    <!-- Back to Home -->
+    <a href="/" class="absolute top-6 left-6 text-xl text-white hover:text-gray-100 transition-colors duration-300 flex items-center gap-2 group">
+    <svg class="w-5 h-5 transform transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+    </svg>
+    <span>Kembali ke Beranda</span>
+    </a>
+
+    <!-- Register Container -->
+    <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-10 space-y-8 z-20">
+        <!-- Logo -->
+        <div class="text-center p-6 border-b border-gray-100">
+            <div class="text-5xl mb-2">🌾</div>
+            <h1 class="text-3xl font-bold text-green-500">DANA UMKM DESA</h1>
+            <p class="text-gray-500 mt-2">Pendaftaran Anggota Baru</p>
+        </div>
+
+        <div class="p-6">
+            <!-- Session Status -->
+            @if (session('status'))
+                <div class="mb-6 p-4 rounded-xl bg-green-50 border-l-4 border-green-500 text-green-700 animate-fade-in">
+                    {{ session('status') }}
+
                 </div>
                 <h1 class="text-xl font-bold gradient-text">DANA UMKM DESA</h1>
             </a>

@@ -1,89 +1,127 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login - {{ config('app.name', 'Laravel') }}</title>
+    <title>UMKM Desa - Peminjaman Dana</title>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Custom Config -->
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         primary: '#16a34a',
+
+                        secondary: '#15803d',
                         accent: '#22c55e',
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.6s ease-out',
+                        'fade-in-down': 'fadeInDown 0.6s ease-out',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+
                     }
                 }
             }
         }
     </script>
+
+
+    <!-- Custom Animation CSS -->
     <style>
-        .gradient-text {
-            background: linear-gradient(135deg, #16a34a, #22c55e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .glass-effect {
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <header class="py-6 bg-white/90 border-b border-gray-200/50 glass-effect">
-        <div class="container mx-auto flex items-center justify-center">
-            <a href="{{ url('/') }}" class="flex items-center space-x-3 group">
-                <div class="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center text-white text-xl group-hover:scale-110 transition-transform duration-300">
-                    🌾
-                </div>
-                <h1 class="text-xl font-bold gradient-text">DANA UMKM DESA</h1>
-            </a>
+
+
+
+<div class="min-h-screen flex items-center justify-center px-4 bg-[url('/images/hero1.jpg')] bg-cover bg-center bg-no-repeat relative">
+    <div class="absolute inset-0 bg-black/40 z-10"></div>
+
+    <div class="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-10 space-y-8 z-20">
+        <!-- Back to Home -->
+    <a href="/" class="absolute top-6 left-6 text-xl text-white hover:text-gray-100 transition-colors duration-300 flex items-center gap-2 group">
+    <svg class="w-5 h-5 transform transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+    </svg>
+    <span>Kembali ke Beranda</span>
+    </a>
+
+        <!-- Logo -->
+        <div class="text-center">
+            <div class="text-5xl mb-2">🌾</div>
+            <h1 class="text-3xl font-bold text-green-500">DANA UMKM DESA</h1>
+            <h2 class="text-gray-500 mt-2 ">Login Pengguna</h2>
         </div>
-    </header>
-    <main class="flex flex-col items-center justify-center min-h-[80vh] px-4">
-        <div class="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8 md:p-10 mt-10">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2 text-center">Login ke Akun Anda</h2>
-            <p class="text-gray-500 mb-6 text-center">Selamat datang kembali!</p>
-            @if (session('status'))
-                <div class="mb-4 font-medium text-sm text-green-500 text-center">
-                    {{ session('status') }}
-                </div>
-            @endif
-            <form method="POST" action="{{ route('login') }}" class="space-y-6">
-                @csrf
-                <div>
-                    <label for="email" class="block font-medium text-gray-700 mb-1">Email</label>
-                    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"
-                        class="block w-full bg-gray-50 border border-gray-200 text-gray-700 focus:border-primary focus:ring-primary rounded-lg shadow-sm px-4 py-3">
-                    @error('email')
-                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div>
-                    <label for="password" class="block font-medium text-gray-700 mb-1">Password</label>
-                    <input id="password" type="password" name="password" required autocomplete="current-password"
-                        class="block w-full bg-gray-50 border border-gray-200 text-gray-700 focus:border-primary focus:ring-primary rounded-lg shadow-sm px-4 py-3">
-                    @error('password')
-                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="flex items-center justify-between">
-                    <label for="remember_me" class="inline-flex items-center">
-                        <input id="remember_me" type="checkbox" name="remember" class="rounded bg-gray-50 border-gray-300 text-primary shadow-sm focus:ring-primary">
-                        <span class="ms-2 text-sm text-gray-600">Ingat saya</span>
-                    </label>
-                    <a href="{{ route('password.request') }}" class="text-sm text-primary hover:underline">Lupa password?</a>
-                </div>
-                <button type="submit" class="w-full bg-primary hover:bg-accent text-white font-bold rounded-xl py-3 transition-all duration-300 shadow">
-                    Login
-                </button>
-            </form>
-            <div class="mt-6 text-center text-gray-600">
-                Belum punya akun?
-                <a href="{{ route('register') }}" class="text-primary font-semibold hover:underline">Daftar sekarang</a>
+
+        
+
+        @if ($errors->any())
+            <div class="text-red-400 text-base text-center">
+                {{ $errors->first() }}
             </div>
+        @endif
+
+        @if (session('status'))
+            <div class="text-green-400 text-base text-center">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('login') }}" class="space-y-6">
+            @csrf
+
+            <div>
+                <label for="email" class="block text-lg font-medium">Email</label>
+                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
+                    class="mt-2 w-full px-4 py-3 text-black border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-600 shadow-sm" />
+                @error('email')
+                    <span class="text-sm text-red-300">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div>
+                <label for="password" class="block text-lg font-medium">Password</label>
+                <input id="password" type="password" name="password" required
+                    class="mt-2 w-full px-4 py-3 text-black border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-600 shadow-sm" />
+                @error('password')
+                    <span class="text-sm text-red-300">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="text-right text-base">
+                @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}" class="text-green-500 hover:underline">Lupa password?</a>
+                @endif
+            </div>
+
+            <button type="submit"
+                class="w-full py-3 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200 font-semibold text-lg">
+                Login
+            </button>
+        </form>
+
+        <div class="flex items-center my-4">
+            <span class="flex-grow h-px bg-gray-300"></span>
+            <p class="px-3 text-gray-300 text-base">atau</p>
+            <span class="flex-grow h-px bg-gray-300"></span>
         </div>
-    </main>
-</body>
-</html>
+
+        <p class="text-center text-lg">
+            Belum punya akun? 
+            <a href="{{ route('register') }}" class="text-green-500 hover:underline font-semibold">Daftar</a>
+        </p>
+    </div>
+</div>
