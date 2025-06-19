@@ -1012,8 +1012,6 @@ session_start();
     margin: 5px auto;
   }
 }
-
-
         }
     </style>
 </head>
